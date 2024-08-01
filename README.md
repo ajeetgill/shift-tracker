@@ -6,12 +6,7 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# process.env works without dotenv package & without NEXT_ prefix (in server side code)
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
