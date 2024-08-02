@@ -1,6 +1,5 @@
-import { relations, sql } from 'drizzle-orm'
+import { relations } from 'drizzle-orm'
 import {
-  integer,
   pgTable,
   text,
   boolean,
@@ -8,7 +7,6 @@ import {
   timestamp,
   date,
   time,
-  pgEnum,
 } from 'drizzle-orm/pg-core'
 import {
   employmentStatusEnum,
@@ -16,7 +14,6 @@ import {
   shiftTypeEnum,
   workStatusEnum,
 } from './schemaEnums'
-// export const roleEnumx = pgEnum('role', ['admin', 'businessOwner', 'worker'])
 
 const id = () => uuid('id').primaryKey().defaultRandom()
 const createdAt = () => timestamp('created_at').defaultNow().notNull()
@@ -61,17 +58,8 @@ export const businesses = pgTable('businesses', {
 })
 
 // Shifts table
-// todo: confirm is server time is same as user time
-// later try servertime with -
-/**
-import { timestamp, pgTable } from "drizzle-orm/pg-core";
-
-const table = pgTable('table', {
- timestamp1: timestamp('timestamp1'),
- timestamp2: timestamp('timestamp2', { precision: 6, withTimezone: true }),
- timestamp3: timestamp('timestamp3').defaultNow(),
-});
- */
+// todo: confirm is server time is same as user time, check previous commit for psql-timestamp
+// later try servertime with - check previous commit for psql-timestamp
 export const shifts = pgTable('shifts', {
   id: id(),
   createdAt: createdAt(),

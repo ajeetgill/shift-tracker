@@ -17,7 +17,6 @@ async function seedData() {
       .insert(users)
       .values([
         {
-          id: randomUUID(),
           email: 'admin@example.com',
           password: await hashPW('111'),
           phoneNumber: '111',
@@ -26,7 +25,6 @@ async function seedData() {
           isPhoneNumberVerified: true,
         },
         {
-          id: randomUUID(),
           email: 'owner@example.com',
           password: await hashPW('222'),
           phoneNumber: '222',
@@ -35,7 +33,6 @@ async function seedData() {
           isPhoneNumberVerified: true,
         },
         {
-          id: randomUUID(),
           email: 'worker333@example.com',
           password: await hashPW('333'),
           phoneNumber: '333',
@@ -43,7 +40,6 @@ async function seedData() {
           role: 'worker',
         },
         {
-          id: randomUUID(),
           email: 'worker2@example.com',
           password: await hashPW('444'),
           phoneNumber: '444',
@@ -51,7 +47,6 @@ async function seedData() {
           role: 'worker',
         },
         {
-          id: randomUUID(),
           email: 'worker9@example.com',
           password: await hashPW('999'),
           phoneNumber: '999',
@@ -60,7 +55,6 @@ async function seedData() {
         },
 
         {
-          id: randomUUID(),
           email: 'worker0@example.com',
           password: await hashPW('pass'),
           phoneNumber: '000',
@@ -76,7 +70,6 @@ async function seedData() {
       .insert(businesses)
       .values([
         {
-          id: randomUUID(),
           name: 'Green Farm',
           location: '123 Farm Lane',
           contactNumber: '1231231234',
@@ -84,7 +77,6 @@ async function seedData() {
           ownerId: businessOwner.id,
         },
         {
-          id: randomUUID(),
           name: 'Build Co',
           location: '456 Construction Ave',
           contactNumber: '3213214321',
