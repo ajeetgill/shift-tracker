@@ -3,6 +3,7 @@ import { UIProviders } from '@/app/providers/NextUIProvider'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import TopBar from '@/components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
-        <UIProviders>{children}</UIProviders>
+        <UIProviders>
+          <TopBar />
+          <div className="px-4 py-8">{children}</div>
+        </UIProviders>
       </body>
     </html>
   )

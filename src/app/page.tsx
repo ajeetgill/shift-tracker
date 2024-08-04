@@ -1,15 +1,35 @@
+import { auth } from '@/auth/auth'
 import SecondaryLink from '@/components/secondaryLinks'
-import { Button } from '@nextui-org/react'
-import Link from 'next/link'
+import { Button, Link } from '@nextui-org/react'
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      hi, you&apos;re in {process.env.NODE_ENV} env.
-      <section className="flex flex-col gap-4 items-center">
-        <SecondaryLink text="Already have an account? Login" link="/signin" />
-        <SecondaryLink text="Need an account? Signup" link="/signup" />
-      </section>
-    </main>
-  )
+export default async function Home() {
+  const session = await auth()
+  if (!session)
+    return (
+      <main className="flex min-h-[50vh] flex-col justify-between p-4 md:p-24 gap-4">
+        <p>
+          Hi, Chief Janitorial welcomes you,
+          <br />
+          Island&apos;s Service Provider
+        </p>
+        <section className="flex flex-col items-center gap-4">
+          <SecondaryLink text="Already have an account? Login" href="/signin" />
+          <SecondaryLink text="Need an account? Signup" href="/signup" />
+        </section>
+      </main>
+    )
+  else {
+    return (
+      <main className="flex min-h-[50vh] flex-col justify-between p-4 md:p-24 gap-4">
+        <p>
+          Hi, Chief Janitorial welcomes you,
+          <br />
+          Island&apos;s Service Provider
+        </p>
+        <Button as={Link} color="primary" href="/dashboard" variant="flat">
+          Log New Shift
+        </Button>
+      </main>
+    )
+  }
 }

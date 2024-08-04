@@ -11,7 +11,10 @@ const SignOutBtn = () => {
           .finally(() => console.log('logOut :: jrny ended'))
       }}
     >
-      <Submit label="Sign Out" color="danger" />
+      <Submit
+        label="Sign Out"
+        className="bg-red-400 hover:bg-red-500 font-semibold w-full max-w-[550px]"
+      />
     </form>
   )
 }

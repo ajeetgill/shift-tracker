@@ -12,11 +12,11 @@ const signup = async () => {
   }
 
   return (
-    <section className="flex w-max flex-col items-center rounded-md mx-auto bg-[#404040] p-8 gap-8">
+    <section className="flex flex-col rounded-md mx-auto px-4 py-8 gap-8">
       <h1 className="uppercase text-2xl font-bold"> Create Account </h1>
 
       <form
-        className="flex max-w-[550px] min-w-[450px] w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
+        className="flex max-w-[550px] w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
         action={async (formData: FormData) => {
           'use server'
           await handleSignUp(formData)
@@ -47,9 +47,9 @@ const signup = async () => {
           className="max-w-md"
         />
 
-        <Submit className="w-full max-w-md" label="Signup" />
+        <Submit className="w-full max-w-md mt-4 mb-2" label="Signup" />
       </form>
-      <SecondaryLink text="Already have an account? Login" link="/signin" />
+      <SecondaryLink text="Already have an account? Login" href="/signin" />
     </section>
   )
 }
