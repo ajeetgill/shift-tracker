@@ -7,13 +7,36 @@ import {
   timestamp,
   date,
   time,
+  integer,
+  pgEnum,
+  primaryKey,
 } from 'drizzle-orm/pg-core'
-import {
-  employmentStatusEnum,
-  roleEnum,
-  shiftTypeEnum,
-  workStatusEnum,
-} from './schemaEnums'
+import type { AdapterAccountType } from 'next-auth/adapters'
+
+export const workStatusEnum = pgEnum('work_status', [
+  'on_shift',
+  'off_shift',
+  'break',
+  'leave',
+  'terminated',
+])
+
+export const employmentStatusEnum = pgEnum('employment_status', [
+  'employed',
+  'onLeave',
+  'retired',
+  'terminated',
+  'resigned',
+])
+
+export const roleEnum = pgEnum('role', ['admin', 'businessOwner', 'worker'])
+
+export const shiftTypeEnum = pgEnum('shift_type', [
+  'regular',
+  'overtime',
+  'holiday',
+  'n/a',
+])
 
 const id = () => uuid('id').primaryKey().defaultRandom()
 const createdAt = () => timestamp('created_at').defaultNow().notNull()
@@ -22,17 +45,17 @@ const createdAt = () => timestamp('created_at').defaultNow().notNull()
 export const users = pgTable('users', {
   id: id(),
   createdAt: createdAt(),
+  name: text('name').notNull(),
   email: text('email').unique(),
+  emailVerified: timestamp('emailVerified', { mode: 'date' }),
+  phoneNumVerified: timestamp('phoneNumVerified', { mode: 'date' }),
   password: text('password').notNull(),
   phoneNumber: text('phone_number').unique().notNull(),
-  fullName: text('full_name').notNull(),
+  image: text('image'),
   currentWorkStatus: workStatusEnum('current_work_status')
     .default('off_shift')
     .notNull(),
   currentShiftId: uuid('current_shift_id'),
-  isPhoneNumberVerified: boolean('is_phone_number_verified')
-    .default(false)
-    .notNull(),
   employmentStatus: employmentStatusEnum('employment_status')
     .default('employed')
     .notNull(),
@@ -44,6 +67,30 @@ export const businessTypes = pgTable('business_types', {
   id: id(),
   name: text('name').notNull(),
 })
+
+export const accounts = pgTable(
+  'account',
+  {
+    userId: uuid('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: text('type').$type<AdapterAccountType>().notNull(),
+    provider: text('provider').notNull(),
+    providerAccountId: text('providerAccountId').notNull(),
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'),
+    token_type: text('token_type'),
+    scope: text('scope'),
+    id_token: text('id_token'),
+    session_state: text('session_state'),
+  },
+  (account) => ({
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
+  }),
+)
 
 // Businesses table
 export const businesses = pgTable('businesses', {
@@ -106,3 +153,8 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const businessTypeRelations = relations(businessTypes, ({ many }) => ({
   businesses: many(businesses),
 }))
+
+export const authDBSchema = {
+  usersTable: users,
+  accountsTable: accounts,
+}

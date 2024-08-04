@@ -1,7 +1,6 @@
 import { client, db } from '@/db/db'
 import { users, businessTypes, businesses, shifts } from '@/db/schema'
-import { randomUUID } from 'crypto'
-import { hashPW } from '@/utils/authTools'
+import { hashPW } from '@/auth/authTools'
 
 // Sample data
 async function seedData() {
@@ -20,47 +19,43 @@ async function seedData() {
           email: 'admin@example.com',
           password: await hashPW('111'),
           phoneNumber: '111',
-          fullName: 'Admin-111',
+          name: 'Admin-111',
           role: 'admin',
-          isPhoneNumberVerified: true,
         },
         {
           email: 'owner@example.com',
           password: await hashPW('222'),
           phoneNumber: '222',
-          fullName: 'Bs-222 Owner',
+          name: 'Bs-222 Owner',
           role: 'businessOwner',
-          isPhoneNumberVerified: true,
         },
         {
           email: 'worker333@example.com',
           password: await hashPW('333'),
           phoneNumber: '333',
-          fullName: 'Worker-3',
+          name: 'Worker-3',
           role: 'worker',
         },
         {
           email: 'worker2@example.com',
           password: await hashPW('444'),
           phoneNumber: '444',
-          fullName: 'Worker4',
+          name: 'Worker4',
           role: 'worker',
         },
         {
           email: 'worker9@example.com',
           password: await hashPW('999'),
           phoneNumber: '999',
-          fullName: 'Worker-999',
+          name: 'Worker-999',
           role: 'worker',
         },
-
         {
           email: 'worker0@example.com',
           password: await hashPW('pass'),
           phoneNumber: '000',
-          fullName: 'Worker-000',
+          name: 'Worker-000',
           role: 'worker',
-          isPhoneNumberVerified: true,
         },
       ])
       .returning()
