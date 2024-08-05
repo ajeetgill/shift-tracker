@@ -9,31 +9,41 @@ const initState = { message: null }
 
 const CreateShift = ({ name }: { name: string }) => {
   const currentDate = `${new Date().toDateString()}`
-  const [currentUnixTime, setCurrentUnixTime] = useState(new Date().getTime())
-  useEffect(() => {
-    const increaseTimer = setInterval(() => {
-      setCurrentUnixTime(new Date().getTime())
-    }, 1000)
-    return () => clearInterval(increaseTimer)
-  }, [])
-  useEffect(() => {
-    const increaseTimer = setInterval(() => {
-      setCurrentUnixTime(new Date().getTime())
-    }, 1000)
-    return () => clearInterval(increaseTimer)
-  }, [])
+  const [currentUnixTime, setCurrentUnixTime] = useState<number | null>(null)
   const [hr, setHr] = useState('☀️ 8 AM')
-  useEffect(() => {
-    let currTime = new Date(currentUnixTime)
-      .toLocaleTimeString()
-      .substring(0, 5)
-    const hr = Number(currTime.substring(0, 2))
-    const hr12fmt = hr > 12 ? `🌕 ${hr - 12} PM` : `☀️ ${hr} AM`
+  // useEffect(() => {
+  //   const increaseTimer = setInterval(() => {
+  //     setCurrentUnixTime(new Date().getTime())
+  //   }, 1000)
+  //   return () => clearInterval(increaseTimer)
+  // }, [])
 
-    setHr(hr12fmt)
-  }, [currentUnixTime])
+  // useEffect(() => {
+  //   let currTime = new Date(currentUnixTime)
+  //     .toLocaleTimeString()
+  //     .substring(0, 5)
+  //   const hr = Number(currTime.substring(0, 2))
+  //   const hr12fmt = hr > 12 ? `🌕 ${hr - 12} PM` : `☀️ ${hr} AM`
+
+  //   setHr(hr12fmt)
+  // }, [currentUnixTime])
+  useEffect(() => {
+    const updateCurrentTime = () => {
+      const now = new Date().getTime()
+      setCurrentUnixTime(now)
+      const currTime = new Date(now).toLocaleTimeString().substring(0, 5)
+      const hr = Number(currTime.substring(0, 2))
+      const hr12fmt = hr > 12 ? `🌕 ${hr - 12} PM` : `☀️ ${hr} AM`
+      setHr(hr12fmt)
+    }
+
+    updateCurrentTime()
+    const timer = setInterval(updateCurrentTime, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   const displayTime = useCallback(() => {
+    if (!currentUnixTime) return '00:00'
     let currTime = new Date(currentUnixTime)
       .toLocaleTimeString()
       .substring(0, 5)
@@ -64,9 +74,11 @@ const CreateShift = ({ name }: { name: string }) => {
           onChange={(e) => setName(e.target.value)}
         />
         <input
+          readOnly
+          aria-readonly
           name="shiftStartUnixTimeMS"
           className="hidden"
-          value={currentUnixTime}
+          value={currentUnixTime || ''}
         />
         <input
           required
