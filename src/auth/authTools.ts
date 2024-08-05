@@ -21,9 +21,7 @@ export const handleLogin = async (formData: FormData) => {
   'use server'
   try {
     formData.set('authActionPath', 'signin')
-    await signIn('credentials', formData, {
-      redirectTo: '/dashboard',
-    })
+    await signIn('credentials', formData)
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
