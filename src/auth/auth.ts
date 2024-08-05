@@ -12,6 +12,7 @@ const authDBSchema = {
 }
 
 export const authOptions: NextAuthConfig = {
+  trustHost: true,
   adapter: DrizzleAdapter(db, authDBSchema),
   session: {
     strategy: 'jwt',
