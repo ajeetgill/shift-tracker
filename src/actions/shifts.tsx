@@ -7,11 +7,11 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
   const unixTime = Math.floor(Number(unixTimeMs) / 1000) + ''
   console.log(formData.get('name'), ' at unixtime:', unixTime)
 }
-export const endActiveShift = async (employee) => {
-  if (!employee) return
-  const currentShift = employee?.currentShiftId
-  console.log('Employee: ', employee)
-  console.log('END ::: Employee ended shift', currentShift)
+// export const endActiveShift = async (employee) => {
+//   if (!employee) return
+//   const currentShift = employee?.currentShiftId
+//   console.log('Employee: ', employee)
+//   console.log('END ::: Employee ended shift', currentShift)
 
-  // setEmployeeWorkingAsInactive(employee)
-}
+//   // setEmployeeWorkingAsInactive(employee)
+// }
