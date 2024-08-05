@@ -7,7 +7,7 @@ export default function TopBar() {
   const menuItems = ['SignIn', 'SignUp']
 
   return (
-    <Navbar shouldHideOnScroll>
+    <Navbar shouldHideOnScroll className="max-w-[750px] mx-auto">
       <NavbarBrand>
         <Image
           src={NextLogo}

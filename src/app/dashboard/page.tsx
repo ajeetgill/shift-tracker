@@ -1,4 +1,6 @@
 import { auth } from '@/auth/auth'
+import dynamic from 'next/dynamic'
+
 import CreateShift from '@/components/createShift'
 import SignOutBtn from '@/components/signOutButton'
 import { redirect } from 'next/navigation'
@@ -15,8 +17,8 @@ const Dashboard = async () => {
     const name = employeeName[0].toUpperCase() + '' + employeeName.substring(1)
 
     return (
-      <div className="flex flex-col justify-between min-h-[70vh]">
-        <CreateShift />
+      <div className="flex flex-col justify-between min-h-[70vh] max-w-[550px] mx-auto">
+        <CreateShift name={name} />
         <SignOutBtn />
       </div>
     )
