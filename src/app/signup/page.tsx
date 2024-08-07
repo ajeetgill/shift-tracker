@@ -2,7 +2,7 @@ import { auth } from '@/auth/auth'
 import { handleSignUp } from '@/auth/authTools'
 import SecondaryLink from '@/components/secondaryLinks'
 import Submit from '@/components/submitBtn'
-import { Input } from '@nextui-org/react'
+import { Input } from '@nextui-org/input'
 import { redirect } from 'next/navigation'
 
 const signup = async () => {

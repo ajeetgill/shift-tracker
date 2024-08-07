@@ -1,9 +1,9 @@
-// Uncomment if needed to seed - priortized test-deploy over fixing this
+// // Uncomment if needed to seed - priortized test-deploy over fixing this
 // import { client, db } from '@/db/db'
 // import { users, businessTypes, businesses, shifts } from '@/db/schema'
 // import { hashPW } from '@/auth/authTools'
 
-// Sample data
+// // Sample data
 // async function seedData() {
 //   try {
 //     // Insert Business Types
@@ -13,6 +13,7 @@
 //       .returning()
 
 //     // Insert Users
+
 //     const [admin, businessOwner, w3, w4, w9, w0] = await db
 //       .insert(users)
 //       .values([

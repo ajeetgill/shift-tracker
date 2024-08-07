@@ -7,8 +7,6 @@ const SignOutBtn = () => {
       action={async () => {
         'use server'
         await signOut()
-          .then(() => console.log('Signedout success.'))
-          .finally(() => console.log('logOut :: jrny ended'))
       }}
     >
       <Submit

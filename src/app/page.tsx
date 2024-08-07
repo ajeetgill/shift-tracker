@@ -1,6 +1,7 @@
 import { auth } from '@/auth/auth'
 import SecondaryLink from '@/components/secondaryLinks'
-import { Button, Link } from '@nextui-org/react'
+import { Button } from '@nextui-org/button'
+import { Link } from '@nextui-org/link'
 
 export default async function Home() {
   const session = await auth()

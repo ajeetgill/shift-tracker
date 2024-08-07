@@ -1,4 +1,4 @@
-import { Navbar, NavbarBrand } from '@nextui-org/react'
+import { Navbar, NavbarBrand } from '@nextui-org/navbar'
 import NextLogo from '@/assets/logo-full.png'
 import Image from 'next/image'
 
