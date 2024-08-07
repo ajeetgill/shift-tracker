@@ -1,32 +1,23 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useTransition } from 'react'
 import { useFormState } from 'react-dom'
-import { clockInShift } from '@/actions/shifts'
-import { Chip, Input } from '@nextui-org/react'
+import { clockInShift, endActiveShift } from '@/actions/shifts'
+import { Button, Chip, Input } from '@nextui-org/react'
 import Submit from './submitBtn'
 
 const initState = { message: null }
 
-const CreateShift = ({ name }: { name: string }) => {
+const CreateShift = ({
+  name,
+  currentWorkStatus,
+}: {
+  name: string
+  currentWorkStatus: any
+}) => {
   const currentDate = `${new Date().toDateString()}`
   const [currentUnixTime, setCurrentUnixTime] = useState<number | null>(null)
   const [hr, setHr] = useState('☀️ 8 AM')
-  // useEffect(() => {
-  //   const increaseTimer = setInterval(() => {
-  //     setCurrentUnixTime(new Date().getTime())
-  //   }, 1000)
-  //   return () => clearInterval(increaseTimer)
-  // }, [])
 
-  // useEffect(() => {
-  //   let currTime = new Date(currentUnixTime)
-  //     .toLocaleTimeString()
-  //     .substring(0, 5)
-  //   const hr = Number(currTime.substring(0, 2))
-  //   const hr12fmt = hr > 12 ? `🌕 ${hr - 12} PM` : `☀️ ${hr} AM`
-
-  //   setHr(hr12fmt)
-  // }, [currentUnixTime])
   useEffect(() => {
     const updateCurrentTime = () => {
       const now = new Date().getTime()
@@ -53,6 +44,15 @@ const CreateShift = ({ name }: { name: string }) => {
   const [formState, action] = useFormState(clockInShift, initState)
   const [businessName, setName] = useState('PEI Farms')
 
+  const isOnActiveShift: boolean =
+    currentWorkStatus === 'on_shift' ? true : false
+  const [isPending, startTransition] = useTransition()
+  const handleClockOut = () => {
+    startTransition(() => {
+      endActiveShift(Date.now())
+    })
+  }
+
   return (
     <div>
       <h3 className="my-4 text-2xl font-bold capitalize py-2">Clockin shift</h3>
@@ -63,6 +63,9 @@ const CreateShift = ({ name }: { name: string }) => {
       >
         <div>
           <h5 className="my-4 text-lg font-bold capitalize py-2">Hi, {name}</h5>
+          <h5 className="my-4 text-lg font-bold capitalize py-2">
+            Shift Status: {`${currentWorkStatus}`.replace('_', ' ')}
+          </h5>
           <Chip className="w-max mr-2">{hr}</Chip>
           {currentDate}
         </div>
@@ -87,10 +90,20 @@ const CreateShift = ({ name }: { name: string }) => {
           className="w-full text-center font-semibold text-5xl bg-[#27272a] rounded-2xl py-2 pointer-events-none"
           placeholder="shiftTime"
           value={displayTime()}
+          name="liveTimer"
           type="text"
         />
 
-        <Submit label={'Clockin'} />
+        <Submit label={'Clockin'} disabled={isOnActiveShift} />
+        {isOnActiveShift && (
+          <Button
+            color="secondary"
+            onClick={handleClockOut}
+            isLoading={isPending}
+          >
+            Clockout
+          </Button>
+        )}
       </form>
     </div>
   )

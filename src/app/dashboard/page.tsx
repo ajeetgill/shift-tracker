@@ -1,8 +1,6 @@
 import { auth } from '@/auth/auth'
-import dynamic from 'next/dynamic'
-
 import CreateShift from '@/components/createShift'
-import SignOutBtn from '@/components/signOutButton'
+import { getEmployeeWorkStatus } from '@/db/dbTools'
 import { redirect } from 'next/navigation'
 
 const Dashboard = async () => {
@@ -15,11 +13,11 @@ const Dashboard = async () => {
     const employeeName = session.user?.name!
     // l -> L, turning luffy//{employeeName} into Luffy//{name}
     const name = employeeName[0].toUpperCase() + '' + employeeName.substring(1)
-
+    const employeeStatus = await getEmployeeWorkStatus(session.user.id)
+    const currentWorkStatus = employeeStatus.currentWorkStatus
     return (
-      <div className="flex flex-col justify-between min-h-[70vh] max-w-[550px] mx-auto">
-        <CreateShift name={name} />
-        <SignOutBtn />
+      <div className="flex flex-col justify-between max-w-[550px] mx-auto gap-8">
+        <CreateShift name={name} currentWorkStatus={currentWorkStatus} />
       </div>
     )
   }

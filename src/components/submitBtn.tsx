@@ -10,7 +10,16 @@ const Submit = ({
   const { pending } = useFormStatus()
 
   return (
-    <Button {...btnProps} type="submit" isLoading={pending} color="primary">
+    <Button
+      {...btnProps}
+      type="submit"
+      isLoading={pending}
+      color="primary"
+      variant={btnProps.disabled ? 'faded' : 'solid'}
+      style={{
+        cursor: btnProps.disabled ? 'not-allowed' : 'pointer',
+      }}
+    >
       {label}
     </Button>
   )
