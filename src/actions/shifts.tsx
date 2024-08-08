@@ -34,7 +34,7 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
 
   try {
     const createdShiftData = await createShift(shiftData)
-    if (createdShiftData) revalidatePath('/dashboard')
+    if (createdShiftData) revalidatePath('/dashboard/@allShifts')
     // console.log('🟢 :: created shift +1')
     // console.log('createdShiftData:', createdShiftData)
   } catch (err) {

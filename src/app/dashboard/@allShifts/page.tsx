@@ -17,17 +17,15 @@ const ShiftsPage = async () => {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">All Shifts ({allShifts.length}):</h2>
-      <Suspense fallback={<p>Loading...</p>}>
-        <section className="flex flex-col gap-4 my-2">
-          {allShifts.length < 1 ? (
-            <div>
-              <p>No shifts to show</p>
-            </div>
-          ) : (
-            <DisplayShifts allShifts={allShifts.reverse()} />
-          )}
-        </section>
-      </Suspense>
+      <section className="flex flex-col gap-4 my-2">
+        {allShifts.length < 1 ? (
+          <div>
+            <p>No shifts to show</p>
+          </div>
+        ) : (
+          <DisplayShifts allShifts={allShifts.reverse()} />
+        )}
+      </section>
     </div>
   )
 }

@@ -5,11 +5,10 @@ import { signIn } from './auth'
 import { AuthError } from 'next-auth'
 import { object, string } from 'zod'
 
-// const SALT_ROUNDS = process.env.AUTH_SALT_ROUNDS
-//   ? Number(process.env.AUTH_SALT_ROUNDS!)
-//   : 3 // bad practive ??
-const SALT_ROUNDS = 9
-
+const SALT_ROUNDS = Number(process.env.AUTH_SALT_ROUNDS!)
+if (!SALT_ROUNDS) {
+  throw new Error('Environment variable missing `SALT_ROUNDS`')
+}
 export const hashPW = (password: string) => {
   return bcrypt.hash(password, SALT_ROUNDS)
 }
