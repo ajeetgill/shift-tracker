@@ -34,7 +34,7 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
 
   try {
     const createdShiftData = await createShift(shiftData)
-    if (createdShiftData) revalidatePath('/dashboard/@allShifts')
+    if (createdShiftData) revalidatePath('/dashboard')
     // console.log('🟢 :: created shift +1')
     // console.log('createdShiftData:', createdShiftData)
   } catch (err) {
@@ -61,7 +61,7 @@ export const endActiveShift = async (endunixTimeMs) => {
     return
   }
   const updatedShift = await updateShiftAsEnded(employeeId, endunixTimeMs)
-  if (updatedShift) revalidatePath('/dashboard/@allShifts')
+  if (updatedShift) revalidatePath('/dashboard')
 
   // setEmployeeWorkingAsInactive(employee)
 }

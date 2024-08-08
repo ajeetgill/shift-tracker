@@ -15,7 +15,7 @@ type Shift = {
   endUnixTimeSecs: null
 }
 const getShiftRow = (shift: Shift) => {
-  console.log('Shift', shift?.id!)
+  // console.log('Shift', shift?.id!)
   const startTime = shift?.startUnixTimeSecs
   const startTimeStr: string = formatTime(startTime)
   const endTime = shift?.endUnixTimeSecs
