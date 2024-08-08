@@ -1,7 +1,7 @@
 import { User } from 'next-auth'
 import { db } from './db'
 import { shifts, users } from './schema'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { hashPW } from '@/auth/authTools'
 
 interface UserAuthData extends User {
@@ -72,13 +72,17 @@ export const createShift = async (shiftData: {
         startUnixTimeSecs: shifts.startUnixTimeSecs,
       })
 
-    const updatedUser = await tx
-      .update(users)
-      .set({
-        currentWorkStatus: 'on_shift',
-        currentShiftId: insertedShift[0].id,
-      })
-      .where(eq(users.id, shiftData.employeeId))
+    try {
+      await tx.execute(sql`
+          UPDATE users
+          SET current_work_status = 'on_shift', current_shift_id = ${insertedShift[0].id}
+          WHERE id = ${shiftData.employeeId}
+          RETURNING *
+        `)
+    } catch (err) {
+      console.error('Err:: could not update shifts ending time')
+      console.error(err)
+    }
 
     return insertedShift
   })
@@ -100,7 +104,7 @@ export const getEmployeeWorkStatus = async (employeeId) => {
       currentWorkStatus: true,
       currentShiftId: true,
       phoneNumber: true,
-    },
+    } as const,
   })
   return shiftStatus
 }
@@ -118,25 +122,27 @@ export const updateShiftAsEnded = async (employeeId, endunixTimeMs) => {
     const currentShiftId = currentUser?.currentShiftId
 
     // Update user status
-    await tx
-      .update(users)
-      .set({ currentWorkStatus: 'off_shift', currentShiftId: null })
-      .where(eq(users.id, employeeId))
+    // // can't use drizzle.update coz it has some issues - so using sql
+    // // https://github.com/drizzle-team/drizzle-orm/issues/2654
+    await tx.execute(sql`
+          UPDATE users
+          SET current_work_status = 'off_shift', current_shift_id = NULL
+          WHERE id = ${employeeId}
+        `)
 
     // Update shift
     const endUnixTimeSecs = Math.floor(Number(endunixTimeMs) / 1000).toString()
-    const updatedShift = await tx
-      .update(shifts)
-      .set({
-        endUnixTimeSecs,
-      })
-      .where(eq(shifts.id, currentShiftId))
-      .returning()
-
-    if (!updatedShift.length) {
-      throw new Error('Shift not found')
+    try {
+      const updatedShift = await tx.execute(sql`
+          UPDATE shifts
+          SET end_unixtime_secs = ${endUnixTimeSecs}
+          WHERE id = ${currentShiftId}
+          RETURNING *
+        `)
+      return updatedShift[0]
+    } catch (err) {
+      console.error('Err:: could not update shifts ending time')
+      console.error(err)
     }
-
-    return updatedShift[0]
   })
 }
