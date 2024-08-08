@@ -1,9 +1,11 @@
 'use client'
-import { useCallback, useEffect, useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { useFormState } from 'react-dom'
 import { clockInShift, endActiveShift } from '@/actions/shifts'
 import { Button, Chip, Input } from '@nextui-org/react'
 import Submit from './submitBtn'
+import { formatLiveTimeHHMM } from '@/utils/helpers'
+import { useRouter } from 'next/navigation'
 
 const initState = { message: null }
 
@@ -16,16 +18,27 @@ const CreateShift = ({
 }) => {
   const currentDate = `${new Date().toDateString()}`
   const [currentUnixTime, setCurrentUnixTime] = useState<number | null>(null)
-  const [hr, setHr] = useState('☀️ 8 AM')
+
+  const fmtTimeHHAMPM = (dateToFmt: Date) => {
+    const getDayEmoji = (hrOfDay: number) => {
+      if (hrOfDay > 6 && hrOfDay < 17) return '☀️ '
+      else return '🌕 '
+    }
+    const hr = dateToFmt.getHours()
+    // console.log('hr == ', hr)
+    const sunmoon = getDayEmoji(hr)
+    const hr12fmt = sunmoon + (hr > 12 ? `${hr - 12} PM` : `${hr} AM`)
+    return hr12fmt
+  }
+  const [hr, setHr] = useState(fmtTimeHHAMPM(new Date()))
+  const [liveTime, setLiveTime] = useState(formatLiveTimeHHMM(Date.now()))
 
   useEffect(() => {
     const updateCurrentTime = () => {
-      const now = new Date().getTime()
-      setCurrentUnixTime(now)
-      const currTime = new Date(now).toLocaleTimeString().substring(0, 5)
-      const hr = Number(currTime.substring(0, 2))
-      const hr12fmt = hr > 12 ? `🌕 ${hr - 12} PM` : `☀️ ${hr} AM`
-      setHr(hr12fmt)
+      const now = new Date()
+      setCurrentUnixTime(now.getTime())
+      setHr(fmtTimeHHAMPM(now))
+      setLiveTime(formatLiveTimeHHMM(now.getTime()))
     }
 
     updateCurrentTime()
@@ -33,23 +46,17 @@ const CreateShift = ({
     return () => clearInterval(timer)
   }, [])
 
-  const displayTime = useCallback(() => {
-    if (!currentUnixTime) return '00:00'
-    let currTime = new Date(currentUnixTime)
-      .toLocaleTimeString()
-      .substring(0, 5)
-    return currTime
-  }, [currentUnixTime])
-
   const [formState, action] = useFormState(clockInShift, initState)
   const [businessName, setName] = useState('PEI Farms')
+
+  const router = useRouter()
 
   const isOnActiveShift: boolean =
     currentWorkStatus === 'on_shift' ? true : false
   const [isPending, startTransition] = useTransition()
   const handleClockOut = () => {
     startTransition(() => {
-      endActiveShift(Date.now())
+      endActiveShift(Date.now()).finally(() => router.refresh())
     })
   }
 
@@ -89,7 +96,7 @@ const CreateShift = ({
           contentEditable="false"
           className="w-full text-center font-semibold text-5xl bg-[#27272a] rounded-2xl py-2 pointer-events-none"
           placeholder="shiftTime"
-          value={displayTime()}
+          value={liveTime}
           name="liveTimer"
           type="text"
         />
