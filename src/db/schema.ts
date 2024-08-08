@@ -2,7 +2,6 @@ import { relations } from 'drizzle-orm'
 import {
   pgTable,
   text,
-  boolean,
   uuid,
   timestamp,
   date,
@@ -13,7 +12,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
 
-const workStatusEnum = pgEnum('work_status', [
+export const workStatusEnum = pgEnum('work_status', [
   'on_shift',
   'off_shift',
   'break',
@@ -21,7 +20,7 @@ const workStatusEnum = pgEnum('work_status', [
   'terminated',
 ])
 
-const employmentStatusEnum = pgEnum('employment_status', [
+export const employmentStatusEnum = pgEnum('employment_status', [
   'employed',
   'onLeave',
   'retired',
@@ -29,9 +28,9 @@ const employmentStatusEnum = pgEnum('employment_status', [
   'resigned',
 ])
 
-const roleEnum = pgEnum('role', ['admin', 'businessOwner', 'worker'])
+export const roleEnum = pgEnum('role', ['admin', 'businessOwner', 'worker'])
 
-const shiftTypeEnum = pgEnum('shift_type', [
+export const shiftTypeEnum = pgEnum('shift_type', [
   'regular',
   'overtime',
   'holiday',
