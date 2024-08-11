@@ -13,6 +13,7 @@ type Shift = {
   id: React.Key
   startUnixTimeSecs: '1722983504'
   endUnixTimeSecs: null
+  business: { name: string }
 }
 const getShiftRow = (shift: Shift) => {
   // console.log('Shift', shift?.id!)
@@ -20,6 +21,8 @@ const getShiftRow = (shift: Shift) => {
   const startTimeStr: string = formatTime(startTime)
   const endTime = shift?.endUnixTimeSecs
   const endTimeStr: string = formatTime(endTime) ?? 'N/A'
+
+  const shiftLocationName = shift?.business?.name ?? 'N/A'
 
   const t = startTime ? new Date(+startTime * 1000) : undefined
   const shiftDate = t
@@ -34,6 +37,7 @@ const getShiftRow = (shift: Shift) => {
       <TableCell>{shiftDate}</TableCell>
       <TableCell>{startTimeStr}</TableCell>
       <TableCell>{endTimeStr}</TableCell>
+      <TableCell>{shiftLocationName}</TableCell>
     </TableRow>
   )
 }
@@ -46,6 +50,7 @@ const DisplayShifts = ({ allShifts }) => {
           <TableColumn>DATE</TableColumn>
           <TableColumn>START TIME</TableColumn>
           <TableColumn>END TIME</TableColumn>
+          <TableColumn>LOCATION</TableColumn>
         </TableHeader>
         <TableBody>
           {allShifts.map((shift: Shift) => getShiftRow(shift))}

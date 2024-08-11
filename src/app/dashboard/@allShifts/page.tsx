@@ -1,16 +1,13 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth/auth'
 import { getAllShifts } from '@/db/dbTools'
-import { Chip } from '@nextui-org/chip'
 import DisplayShifts from '@/components/displayShifts'
-import { Suspense } from 'react'
 
 const ShiftsPage = async () => {
   const session = await auth()
   if (!session) redirect('/signin')
 
   const employee = session.user
-  const employeeName = employee?.name
   const allShifts = await getAllShifts(employee.id)
   // console.log('📒 Allshifts ', allShifts)
 
@@ -23,7 +20,7 @@ const ShiftsPage = async () => {
             <p>No shifts to show</p>
           </div>
         ) : (
-          <DisplayShifts allShifts={allShifts.reverse()} />
+          <DisplayShifts allShifts={allShifts} />
         )}
       </section>
     </div>

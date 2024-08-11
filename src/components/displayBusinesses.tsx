@@ -22,7 +22,7 @@ const DisplayBusinesses = ({ displayData }) => {
           <TableColumn>BUSINESS NAME</TableColumn>
         </TableHeader>
         <TableBody>
-          {displayData.map((item, index) => (
+          {displayData.map((item, index: number) => (
             <TableRow key={item?.id}>
               <TableCell>{+index + 1} )</TableCell>
               <TableCell>{item?.name}</TableCell>

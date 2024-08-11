@@ -2,7 +2,7 @@
 import { useEffect, useState, useTransition } from 'react'
 import { useFormState } from 'react-dom'
 import { clockInShift, endActiveShift } from '@/actions/shifts'
-import { Button, Chip, Input } from '@nextui-org/react'
+import { Button, Chip, Input, Select, SelectItem } from '@nextui-org/react'
 import Submit from './submitBtn'
 import { formatLiveTimeHHMM } from '@/utils/helpers'
 import { useRouter } from 'next/navigation'
@@ -12,9 +12,11 @@ const initState = { message: null }
 const CreateShift = ({
   name,
   currentWorkStatus,
+  shiftLocations,
 }: {
   name: string
   currentWorkStatus: any
+  shiftLocations: [{ id: string; name: string }]
 }) => {
   const currentDate = `${new Date().toDateString()}`
   const [currentUnixTime, setCurrentUnixTime] = useState<number | null>(null)
@@ -25,7 +27,6 @@ const CreateShift = ({
       else return '🌕 '
     }
     const hr = dateToFmt.getHours()
-    // console.log('hr == ', hr)
     const sunmoon = getDayEmoji(hr)
     const hr12fmt = sunmoon + (hr > 12 ? `${hr - 12} PM` : `${hr} AM`)
     return hr12fmt
@@ -76,13 +77,20 @@ const CreateShift = ({
           <Chip className="w-max mr-2">{hr}</Chip>
           {currentDate}
         </div>
-        <Input
-          required
-          name="name"
-          value={businessName}
-          placeholder="Business Name"
-          onChange={(e) => setName(e.target.value)}
-        />
+
+        <Select
+          label="Shift Location"
+          className="w-full"
+          name="location"
+          isRequired
+          isDisabled={isOnActiveShift}
+        >
+          {shiftLocations.map((location) => (
+            <SelectItem value={location?.id} key={location?.id}>
+              {location?.name}
+            </SelectItem>
+          ))}
+        </Select>
         <input
           readOnly
           aria-readonly

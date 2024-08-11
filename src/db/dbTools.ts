@@ -55,7 +55,6 @@ export const createShift = async (shiftData: {
   businessId: string
   startUnixTimeSecs: string
   endTime: string | null
-  gpsShiftLocation: string
 }) => {
   const shiftEmployee = shiftData?.employeeId
   // console.log('⚪DB:: Add shift of EMPLOYEE : ', shiftEmployee)
@@ -76,7 +75,6 @@ export const createShift = async (shiftData: {
       .values({
         ...shiftData,
         date: shiftDate,
-        businessId: shiftData.employeeId,
       })
       .returning({
         id: shifts.id,
@@ -100,13 +98,23 @@ export const createShift = async (shiftData: {
   })
 }
 
-export const getAllShifts = async (employeeId) => {
+export const getAllShifts = async (employeeId: string) => {
   const allShifts = await db.query.shifts.findMany({
     where: eq(shifts.employeeId, employeeId),
+    with: {
+      business: {
+        columns: {
+          name: true,
+        },
+      },
+    },
+    orderBy: (shifts, { desc }) => [
+      desc(shifts.serverDate),
+      desc(shifts.serverStartTime),
+    ],
   })
-  return allShifts ? allShifts : []
+  return allShifts
 }
-
 export const getEmployeeWorkStatus = async (employeeId) => {
   let shiftStatus = await db.query.users.findFirst({
     where: eq(users.id, employeeId),
@@ -211,9 +219,13 @@ export const createBusinesses = async (ownerId, formData: FormData) => {
     throw new Error('Could not create business')
   }
 }
-export const getAllBusinesses = async (ownerId) => {
+export const getAllBusinesses = async (ownerId: string) => {
   const ownedBusinesses = await db.query.businesses.findMany({
     where: eq(businesses.ownerId, ownerId),
   })
+  return ownedBusinesses ? ownedBusinesses : []
+}
+export const getAllLocations = async () => {
+  const ownedBusinesses = await db.query.businesses.findMany()
   return ownedBusinesses ? ownedBusinesses : []
 }

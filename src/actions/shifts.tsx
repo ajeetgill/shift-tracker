@@ -19,16 +19,15 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
     employeeId = session.user?.id!
   }
 
-  const businessName = formData.get('name')
+  const businessId = formData.get('location').toString()
   const temp_unixTimeMs = formData.get('shiftStartUnixTimeMS')
   const startUnixTimeSecs = Math.floor(Number(temp_unixTimeMs) / 1000) + ''
 
   const shiftData = {
     employeeId,
-    businessId: employeeId,
+    businessId,
     startUnixTimeSecs,
     endTime: null,
-    gpsShiftLocation: '123.456,-78.910',
   }
   // console.log('TODO:: about to create a shift, data =', shiftData)
 
