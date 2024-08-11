@@ -6,6 +6,20 @@ import { accounts, users } from '@/db/schema'
 import { getUserFromDB, createUser } from '@/db/dbTools'
 import { authValidationSchema, comparePW } from './authTools'
 
+declare module 'next-auth' {
+  interface User {
+    phoneNumber?: string
+    role?: string
+  }
+
+  interface Session {
+    user: {
+      phoneNumber?: string
+      role?: string
+    } & DefaultSession['user']
+  }
+}
+
 const authDBSchema = {
   usersTable: users,
   accountsTable: accounts,
@@ -83,9 +97,21 @@ export const authOptions: NextAuthConfig = {
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.phoneNumber = user.phoneNumber
+        token.role = user.role?.toLowerCase()
+        console.log('🔒 user', user)
+        console.log('🔒 token', token)
+      }
+      return token
+    },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token?.sub // read about subject identifier in readme
+        session.user.phoneNumber = token.phoneNumber as string
+        session.user.role = token.role as string | undefined
       }
       return session
     },

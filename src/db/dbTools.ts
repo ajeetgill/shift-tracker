@@ -1,9 +1,21 @@
+'use server'
 import { User } from 'next-auth'
 import { db } from './db'
-import { shifts, users } from './schema'
+import { businesses, businessTypes, shifts, users } from './schema'
 import { eq, sql } from 'drizzle-orm'
 import { hashPW } from '@/auth/authTools'
+import { DEFAULT_BUSSINESS_TYPE } from '@/utils/constants'
+import { revalidatePath } from 'next/cache'
 
+/**
+Naming of functions:
+CREATE
+READ/GET
+UPDATE
+DELETE
+* Try to keep naming consistent with CRUD operations, that way it's easier to tell
+* that this function is doing something with database, and it's a CRUD operation.
+*/
 interface UserAuthData extends User {
   name: string
   phoneNumber: string
@@ -145,4 +157,63 @@ export const updateShiftAsEnded = async (employeeId, endunixTimeMs) => {
       console.error(err)
     }
   })
+}
+
+const createBusinessTypes = async () => {
+  const data = await db
+    .insert(businessTypes)
+    .values([{ name: 'Farm' }])
+    .returning()
+  return data[0]
+}
+
+const getBusinessTypeId = async (businessType: string) => {
+  // for now returns farm type, if it doesn't exist -
+  // it'll be created (to avoid crashing for users)
+  let typeId = undefined
+  try {
+    typeId = await db.query.businessTypes.findFirst({
+      where: eq(businessTypes?.name, businessType),
+    })
+    if (!typeId) {
+      typeId = await createBusinessTypes()
+      typeId = typeId[0]
+    }
+    console.log('Btype: ', typeId)
+    return typeId?.id
+  } catch (err) {
+    console.error('Could nott find business of type : ', businessType)
+  }
+}
+
+export const createBusinesses = async (ownerId, formData: FormData) => {
+  try {
+    const businessNames = formData.getAll('businessname')
+    const bTypeID = await getBusinessTypeId(DEFAULT_BUSSINESS_TYPE)
+    console.log('bType: ', bTypeID)
+    // b-name, ownerId, location type
+    const businessesData = businessNames.map((businessName) => {
+      return {
+        name: businessName.toString(),
+        ownerId: ownerId,
+        location: 'N/A',
+        businessTypeId: bTypeID,
+      }
+    })
+    console.log('👍 Business Created, ', businessesData)
+
+    await db.insert(businesses).values(businessesData)
+
+    revalidatePath('/employer/@allBusinesses')
+  } catch (err) {
+    console.error(err)
+    console.error('Could not create ')
+    throw new Error('Could not create business')
+  }
+}
+export const getAllBusinesses = async (ownerId) => {
+  const ownedBusinesses = await db.query.businesses.findMany({
+    where: eq(businesses.ownerId, ownerId),
+  })
+  return ownedBusinesses ? ownedBusinesses : []
 }

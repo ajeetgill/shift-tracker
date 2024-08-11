@@ -1,3 +1,4 @@
+import { USER_ROLES } from '@/utils/constants'
 import { relations } from 'drizzle-orm'
 import {
   pgTable,
@@ -28,7 +29,11 @@ export const employmentStatusEnum = pgEnum('employment_status', [
   'resigned',
 ])
 
-export const roleEnum = pgEnum('role', ['admin', 'businessOwner', 'worker'])
+export const roleEnum = pgEnum('role', [
+  USER_ROLES.ADMIN,
+  USER_ROLES.OWNER,
+  USER_ROLES.WORKER,
+])
 
 export const shiftTypeEnum = pgEnum('shift_type', [
   'regular',
@@ -93,13 +98,13 @@ export const accounts = pgTable(
 
 // Businesses table
 export const businesses = pgTable('businesses', {
-  id: id(),
   createdAt: createdAt(),
+  id: id(),
+  ownerId: uuid('owner_id').notNull(),
   name: text('name').notNull(),
   location: text('location').notNull(),
-  contactNumber: text('contact_number'),
   businessTypeId: uuid('business_type_id').notNull(),
-  ownerId: uuid('owner_id').notNull(),
+  contactNumber: text('contact_number'),
   gpsLocation: text('gps_location'),
 })
 
