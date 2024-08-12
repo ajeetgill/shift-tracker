@@ -10,7 +10,7 @@ export default async function Home() {
     return (
       <main className="flex min-h-[50vh] flex-col justify-between p-4 md:p-24 gap-4">
         <p>
-          Hi, We're Chief Janitorial
+          Hi, We&apos;sre Chief Janitorial
           <br />
           Island&apos;s Service Provider :)
         </p>
