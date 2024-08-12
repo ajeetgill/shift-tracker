@@ -28,7 +28,7 @@ export default async function Home() {
           <br />
           Chief Janitorial welcomes you,
           <br />
-          Island&apos;s Service Provider :)
+          Island&apos;s Service Provider.
         </p>
         <Button
           as={Link}
