@@ -22,3 +22,33 @@ Bare minimum technology you need to familiar with:
 - Async nature of javascript
 - Optional Asset: if you're familar with Typescript & weird nature of Javascript
 - Next.js : You need to be familiar with page/layout/default.tsx ..etc naming conventions of Nextjs.
+- Git, somewhat basic knowledge of the workflow even if you're not familiar with Git-CLI
+- Optional Tiny Asset: if you know the difference and relation between Git & Github.
+
+### Recommended learning material
+
+#### Nextjs
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+#### Git, and everything else
+
+This paragraph is optional reading, if you want free good learning resources as a student.
+
+For this, you'll need to connet your Github Account with your University provided email.
+Also, if you're using an account made using University Email, make sure to add a secondary email (which can be your gmail/[proton-mail](https://proton.me/mail) account).
+Basically have two email on your Github Accont (personal and university provided).
+
+If you're a student, sigin to your Github Education Pack account, [signup if you don't have one](https://education.github.com/pack/join).
+You'll need some form of validating your status as a student (more details on Github Website).
+
+- Signup for Github Education Pack
+- Signup for FrontEnd Masters, would reommend the whole platform but especially watch [The Hard Parts of Asynchronous JavaScript
+ by Will Sentance](https://frontendmasters.com/courses/javascript-new-hard-parts/)
+
+
+Next := Currently working on Deployment w/ Vercel
