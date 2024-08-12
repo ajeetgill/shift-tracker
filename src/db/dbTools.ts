@@ -2,7 +2,7 @@
 import { User } from 'next-auth'
 import { db } from './db'
 import { businesses, businessTypes, shifts, users } from './schema'
-import { eq, sql } from 'drizzle-orm'
+import { eq, ilike, sql } from 'drizzle-orm'
 import { hashPW } from '@/auth/authTools'
 import { DEFAULT_BUSSINESS_TYPE } from '@/utils/constants'
 import { revalidatePath } from 'next/cache'
@@ -170,7 +170,7 @@ export const updateShiftAsEnded = async (employeeId, endunixTimeMs) => {
 const createBusinessTypes = async () => {
   const data = await db
     .insert(businessTypes)
-    .values([{ name: 'Farm' }])
+    .values([{ name: DEFAULT_BUSSINESS_TYPE }])
     .returning()
   return data[0]
 }
@@ -181,7 +181,7 @@ const getBusinessTypeId = async (businessType: string) => {
   let typeId = undefined
   try {
     typeId = await db.query.businessTypes.findFirst({
-      where: eq(businessTypes?.name, businessType),
+      where: ilike(businessTypes?.name, businessType),
     })
     if (!typeId) {
       typeId = await createBusinessTypes()
@@ -197,7 +197,9 @@ const getBusinessTypeId = async (businessType: string) => {
 export const createBusinesses = async (ownerId, formData: FormData) => {
   try {
     const businessNames = formData.getAll('businessname')
-    const bTypeID = await getBusinessTypeId(DEFAULT_BUSSINESS_TYPE)
+    const bTypeID = await getBusinessTypeId(
+      DEFAULT_BUSSINESS_TYPE.toLowerCase(),
+    )
     console.log('bType: ', bTypeID)
     // b-name, ownerId, location type
     const businessesData = businessNames.map((businessName) => {
