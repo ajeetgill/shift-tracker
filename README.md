@@ -52,3 +52,11 @@ You'll need some form of validating your status as a student (more details on Gi
 
 
 Next := Currently working on Deployment w/ Vercel
+## Deployment Information (deployed on Vercel)
+Each push in the branch pushes a deployment.
+- There are 3 branches in this Github project, which have corresponding URLs that each branch pushes changes to.
+- Format :`git-branch` : `{subdomain}.chiefjanitorial.com`(deployed url e.g. `staging.chiefjanitorial.com`) : purpose
+- `dev`: `dev.chiefjanitorial.com` : For quick iterations when developing.
+- `staging` : `staging.chiefjanitorial.com` : For sending final preview changes to client or anyone intermediatery - { 🚧 might be redundant with dev }
+
+- `main` : 🚨PRODUCTION🚨 : `employeeshifts.chiefjanitorial.com` : Real users can access this URL
