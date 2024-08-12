@@ -1,4 +1,5 @@
 import { UIProviders } from '@/app/providers/NextUIProvider'
+import { Analytics } from '@vercel/analytics/react'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -22,7 +23,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <UIProviders>
           <TopBar />
-          <div className="px-4 py-8">{children}</div>
+          <div className="px-4 py-8">
+            {children}
+            <Analytics />
+          </div>
         </UIProviders>
       </body>
     </html>
