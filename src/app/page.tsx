@@ -12,7 +12,7 @@ export default async function Home() {
         <p>
           Hi, Chief Janitorial welcomes you,
           <br />
-          Island&apos;s Service Provider
+          Island&apos;s Service Provider :)
         </p>
         <section className="flex flex-col items-center gap-4">
           <SecondaryLink text="Already have an account? Login" href="/signin" />
@@ -28,7 +28,7 @@ export default async function Home() {
           <br />
           Chief Janitorial welcomes you,
           <br />
-          Island&apos;s Service Provider
+          Island&apos;s Service Provider :)
         </p>
         <Button
           as={Link}
