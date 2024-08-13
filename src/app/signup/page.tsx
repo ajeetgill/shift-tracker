@@ -2,6 +2,8 @@ import { auth } from '@/auth/auth'
 import { handleSignUp } from '@/auth/authTools'
 import SecondaryLink from '@/components/secondaryLinks'
 import Submit from '@/components/submitBtn'
+import { signupSchema } from '@/utils/validators'
+import type { SignUpData } from '@/utils/validators'
 import { Input } from '@nextui-org/input'
 import { redirect } from 'next/navigation'
 
@@ -19,28 +21,34 @@ const signup = async () => {
         className="flex max-w-[550px] w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
         action={async (formData: FormData) => {
           'use server'
-          await handleSignUp(formData)
+          const newUserData: SignUpData = signupSchema.parse({
+            name: formData.get('name'),
+            phoneNumber: formData.get('phone'),
+            password: formData.get('password'),
+          })
+          console.log('1-SignUP Data validated,', newUserData)
+          // await handleSignUp(newUserData)
         }}
       >
         <Input
-          type="text"
           name="name"
+          type="text"
           required
           label="Name"
           placeholder="Your name"
           className="max-w-md"
         />
         <Input
-          type="text"
           name="phone"
+          type="text"
           required
           label="Phone"
           placeholder="902XXX1234"
           className="max-w-md"
         />
         <Input
-          type="text"
           name="password"
+          type="text"
           required
           label="Choose Password"
           placeholder="Length 3-16 characters"

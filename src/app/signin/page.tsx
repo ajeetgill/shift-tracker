@@ -2,6 +2,7 @@ import { auth } from '@/auth/auth'
 import { handleLogin } from '@/auth/authTools'
 import SecondaryLink from '@/components/secondaryLinks'
 import Submit from '@/components/submitBtn'
+import { signinSchema } from '@/utils/validators'
 import { Input } from '@nextui-org/input'
 import { redirect } from 'next/navigation'
 
@@ -19,7 +20,12 @@ const login = async () => {
         className="flex max-w-[550px] w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
         action={async (formData: FormData) => {
           'use server'
-          await handleLogin(formData)
+          const userData = signinSchema.parse({
+            phoneNumber: formData.get('phone'),
+            password: formData.get('password'),
+          })
+          console.log('Signin Data validated,', userData)
+          // await handleLogin(userData)
         }}
       >
         <Input

@@ -16,13 +16,13 @@ DELETE
 * Try to keep naming consistent with CRUD operations, that way it's easier to tell
 * that this function is doing something with database, and it's a CRUD operation.
 */
-interface UserAuthData extends User {
+interface UserAuthDataOld extends User {
   name: string
   phoneNumber: string
   password: string
 }
 
-export const getUserFromDB = async (userData: UserAuthData) => {
+export const getUserFromDB = async (userData: UserAuthDataOld) => {
   // console.log('DB:: finding user...')
   const match = await db.query.users.findFirst({
     where: eq(users.phoneNumber, userData.phoneNumber),
@@ -35,7 +35,7 @@ export const getUserFromDB = async (userData: UserAuthData) => {
   // console.log(`DB:: user found`)
   return match
 }
-export const createUser = async (userData: UserAuthData) => {
+export const createUser = async (userData: UserAuthDataOld) => {
   const hashedPassword = await hashPW(userData.password)
 
   const createdUsers = await db

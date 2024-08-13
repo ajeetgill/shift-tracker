@@ -1,4 +1,5 @@
 import { USER_ROLES } from '@/utils/constants'
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { relations } from 'drizzle-orm'
 import {
   pgTable,
@@ -65,6 +66,8 @@ export const users = pgTable('users', {
     .notNull(),
   role: roleEnum('role').default('worker').notNull(),
 })
+export const insertUserSchema = createInsertSchema(users)
+export const selectUserSchema = createSelectSchema(users)
 
 // Business Types table
 export const businessTypes = pgTable('business_types', {
