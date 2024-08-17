@@ -49,7 +49,10 @@ export const authOptions: NextAuthConfig = {
 
         if (!credentials) throw new Error('Missing credentials.')
 
-        const userData = userAuthSchema.safeParse(credentials)
+        const userData = userAuthSchema.safeParse({
+          ...credentials,
+          phoneNumber: Number(credentials?.phoneNumber),
+        })
 
         console.log('userData', credentials)
         if (currentPath === '/signin') {
