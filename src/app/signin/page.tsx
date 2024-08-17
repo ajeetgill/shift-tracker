@@ -1,5 +1,4 @@
 import { auth } from '@/auth/auth'
-import { handleLogin } from '@/auth/authTools'
 import SecondaryLink from '@/components/secondaryLinks'
 import Submit from '@/components/submitBtn'
 import { signinSchema } from '@/utils/validators'

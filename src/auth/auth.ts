@@ -3,8 +3,8 @@ import Credentials from 'next-auth/providers/credentials'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from '@/db/db'
 import { accounts, users } from '@/db/schema'
-import { getUserFromDB, createUser } from '@/db/dbTools'
-import { authValidationSchema, comparePW } from './authTools'
+import { createUser } from '@/db/dbTools'
+import { userAuthSchema } from '@/utils/validators'
 
 declare module 'next-auth' {
   interface User {
@@ -34,62 +34,57 @@ export const authOptions: NextAuthConfig = {
   providers: [
     Credentials({
       credentials: {
-        name: { label: 'Name' },
-        phone: { label: 'Phone Number' },
+        name: { label: 'Name', type: 'text' },
+        phoneNumber: { label: 'Phone Number' },
         password: { label: 'Password', type: 'password' },
         authActionPath: { label: 'Auth Action', type: 'text' },
       },
       authorize: async (credentials) => {
+        // at this point the credentials are validated inside the handleSignUp
+        // (but in order to use them without type issues - I still need to parse them
+        // OR properly define the credentials key-value types)
+        //
         const currentPath = '/' + credentials?.authActionPath!
+        console.log('currentPath::', currentPath)
 
         if (!credentials) throw new Error('Missing credentials.')
 
-        let userData = undefined
-        try {
-          // signin doesn't require name
-          const name = credentials.name ? credentials.name : 'login-request'
-          userData = authValidationSchema.parse({
-            name,
-            phoneNumber: credentials.phone,
-            password: credentials.password,
-          })
-          // console.log('Auth:: Credentials are valid🤌.')
-        } catch (e) {
-          console.error('Invalid Credentials')
-          console.error(e)
-        }
+        const userData = userAuthSchema.safeParse(credentials)
+
+        console.log('userData', credentials)
         if (currentPath === '/signin') {
-          try {
-            // try to find the user - if doesn't exist - exit
-            // if exist - if correct password then return user
-            const matchedUser = await getUserFromDB(userData!)
+          console.log('WIP-Zod validation for /signin')
+          // try {
+          // try to find the user - if doesn't exist - exit
+          // if exist - if correct password then return user
+          //   const matchedUser = await getUserFromDB(userData!)
 
-            if (!matchedUser) throw new Error('invalid user')
-            const correctPW = await comparePW(
-              userData?.password!,
-              matchedUser?.password!,
-            )
+          //   if (!matchedUser) throw new Error('invalid user')
+          //   const correctPW = await comparePW(
+          //     userData?.password!,
+          //     matchedUser?.password!,
+          //   )
 
-            if (!correctPW) {
-              throw new Error('invalid user')
-            }
-            // console.log('Auth:: Found a match correctPW :: ', correctPW)
-            return matchedUser
-          } catch (userNotExistError) {
-            // console.error(accountCreationError)
-            console.error('Auth:: 🔴 /signin user-ph: ', userData?.phoneNumber)
-          }
+          //   if (!correctPW) {
+          //     throw new Error('invalid user')
+          //   }
+          //   // console.log('Auth:: Found a match correctPW :: ', correctPW)
+          //   return matchedUser
+          // } catch (userNotExistError) {
+          //   // console.error(accountCreationError)
+          //   console.error('Auth:: 🔴 /signin user-ph: ', userData?.phoneNumber)
+          // }
         } else if (currentPath === '/signup') {
           try {
-            const newCreatedUser = await createUser(userData!)
-            // userData! --> ! coz  I've parsed the data with zod'
-            // console.log('Auth:: 🆕 new user created', newCreatedUser)
-
+            const newCreatedUser = await createUser(userData.data)
             return newCreatedUser
           } catch (accountCreationError) {
+            console.error('🔴/could not signup userData,')
+            console.error(userData.error)
+            console.error(userData.data)
             console.error(
               'Auth:: 🔴 /signup Could not create account with phone number: ',
-              userData?.phoneNumber,
+              userData.data?.phoneNumber,
             )
           }
         }
@@ -102,8 +97,6 @@ export const authOptions: NextAuthConfig = {
         token.id = user.id
         token.phoneNumber = user.phoneNumber
         token.role = user.role?.toLowerCase()
-        console.log('🔒 user', user)
-        console.log('🔒 token', token)
       }
       return token
     },

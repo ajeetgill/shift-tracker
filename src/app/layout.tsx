@@ -1,4 +1,5 @@
 import { UIProviders } from '@/app/providers/NextUIProvider'
+import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
 
 import type { Metadata } from 'next'
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
+        <Toaster position="top-right" />
         <UIProviders>
           <TopBar />
           <div className="px-4 py-8">

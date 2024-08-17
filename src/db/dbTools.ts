@@ -3,9 +3,11 @@ import { User } from 'next-auth'
 import { db } from './db'
 import { businesses, businessTypes, shifts, users } from './schema'
 import { eq, ilike, sql } from 'drizzle-orm'
-import { hashPW } from '@/auth/authTools'
+
 import { DEFAULT_BUSSINESS_TYPE } from '@/utils/constants'
 import { revalidatePath } from 'next/cache'
+import { UserAuthData } from '@/utils/validators'
+import { hashPW } from '@/auth/authUtils'
 
 /**
 Naming of functions:
@@ -35,12 +37,17 @@ export const getUserFromDB = async (userData: UserAuthDataOld) => {
   // console.log(`DB:: user found`)
   return match
 }
-export const createUser = async (userData: UserAuthDataOld) => {
-  const hashedPassword = await hashPW(userData.password)
+
+export const createUser = async (userData: UserAuthData) => {
+  const hashedPassword: string = await hashPW(userData.password)
 
   const createdUsers = await db
     .insert(users)
-    .values({ ...userData, password: hashedPassword })
+    .values({
+      phoneNumber: userData.phoneNumber,
+      name: userData.name,
+      password: hashedPassword,
+    })
     .returning()
   // Unlike query - which gives back single user (my guess is coz the name of function is - findFirst)
   // and what I didn't know OR realize was that .insert().values()

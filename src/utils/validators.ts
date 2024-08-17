@@ -1,27 +1,33 @@
 import { z } from 'zod'
-import { AUTH_JS_ACTION } from './constants'
-import { users } from '@/db/schema'
+import { AUTH_JS_ACTION, PHONE_NUM_LENGTH } from './constants'
 
 // START::- FIELD SCHEMAS (not same as objects)
-const NameSchema = z
+export const NameSchema = z
   .string()
   .min(3, 'Name must be minimum 3 characters')
   .max(16, 'Name must be maximum 16 characters')
 
-const PhoneNumberSchema = z.preprocess((val) => {
-  console.log('PhoneNumberSchema - val = ', val, typeof val)
-  if (typeof val === 'string') {
-    // Remove non-digit characters and convert to number
-    const cleanedPhone = val.replace(/\D/g, '')
-    return parseInt(cleanedPhone, 10)
-  }
-  return undefined
-}, z.number().int().positive('Phone number must be a positive integer'))
-
-const PasswordSchema = z
+export const PhoneNumberSchema = z
   .string()
-  .min(3, 'Name must be minimum 3 characters')
-  .max(16, 'Name must be maximum 16 characters')
+  .trim()
+  .regex(/^\d+$/, { message: 'Phone number must contain only digits' })
+  .min(3, { message: 'Phone number must be at least 3 digits long' })
+  .max(PHONE_NUM_LENGTH, { message: 'Invalid Phone Number' })
+
+// const PhoneNumberSchema = z.preprocess((val) => {
+//   console.log('PhoneNumberSchema - val = ', val, typeof val)
+//   if (typeof val === 'string') {
+//     // Remove non-digit characters and convert to number
+//     const cleanedPhone = val.replace(/\D/g, '')
+//     return parseInt(cleanedPhone, 10)
+//   }
+//   return undefined
+// }, z.number().int().positive('Phone number must be a positive integer'))
+
+export const PasswordSchema = z
+  .string()
+  .min(3, 'Password must be minimum 3 characters')
+  .max(16, 'Password must be maximum 16 characters')
 
 // END::- FIELD SCHEMAS (not same as objects)
 
@@ -58,5 +64,5 @@ type AuthActionSignInData = z.infer<typeof userDataAuthAction>
 // END::-
 // the `AuthActionSignInData` add auth action used to differentiate b/w signin and signup
 
-export { signupSchema, signinSchema }
+export { signupSchema, signinSchema, userAuthSchema }
 export type { SignInData, AuthActionSignInData, SignUpData, UserAuthData }

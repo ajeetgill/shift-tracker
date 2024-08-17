@@ -6,3 +6,6 @@ export const USER_ROLES = {
   ADMIN: 'admin',
 } as const
 export const DEFAULT_BUSSINESS_TYPE = 'farm'
+
+export const AUTH_JS_ACTION = ['signup', 'signin'] as const
+export const PHONE_NUM_LENGTH = 5
