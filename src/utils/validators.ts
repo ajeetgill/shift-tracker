@@ -4,6 +4,7 @@ import { AUTH_JS_ACTION, PHONE_NUM_LENGTH } from './constants'
 // START::- FIELD SCHEMAS (not same as objects)
 export const NameSchema = z
   .string()
+  .trim()
   .min(3, 'Name must be minimum 3 characters')
   .max(16, 'Name must be maximum 16 characters')
 
@@ -11,8 +12,8 @@ export const PhoneNumberSchema = z
   .string()
   .trim()
   .regex(/^\d+$/, { message: 'Phone number must contain only digits' })
-  .min(3, { message: 'Phone number must be at least 3 digits long' })
-  .max(PHONE_NUM_LENGTH, { message: 'Invalid Phone Number' })
+  .min(3, { message: 'Phone Number Length too short' })
+  .max(PHONE_NUM_LENGTH, { message: 'Invalid Phone Number Length' })
 
 // const PhoneNumberSchema = z.preprocess((val) => {
 //   console.log('PhoneNumberSchema - val = ', val, typeof val)
@@ -26,6 +27,7 @@ export const PhoneNumberSchema = z
 
 export const PasswordSchema = z
   .string()
+  .trim()
   .min(3, 'Password must be minimum 3 characters')
   .max(16, 'Password must be maximum 16 characters')
 
@@ -54,7 +56,7 @@ type UserAuthData = z.infer<typeof userAuthSchema>
 //   authReactActionPath: z.enum(AUTH_JS_ACTION),
 // })
 const userDataAuthAction = signupSchema.extend({
-  authReactActionPath: z.string().length(6),
+  authReactActionPath: z.string().trim().length(6),
 })
 type AuthActionSignInData = z.infer<typeof userDataAuthAction>
 

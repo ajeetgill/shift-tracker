@@ -11,8 +11,8 @@ const BusinessesPage = async () => {
   try {
     data = await getAllBusinesses(userId)
   } catch (err) {
-    console.error(err)
-    console.error('Could not getAllBusinesses list')
+    // console.error(err)
+    console.error('DEV::🔴/Could not getAllBusinesses list')
   }
   // console.log('🏢 Owned Businesses ', data)
 

@@ -1,6 +1,6 @@
 'use server'
 import { signIn } from '@/auth/auth'
-import { signupSchema } from '@/utils/validators'
+import { signinSchema, signupSchema } from '@/utils/validators'
 import { AuthError } from 'next-auth'
 import type { ZodError } from 'zod'
 
@@ -22,8 +22,6 @@ export const handleSignUp = async (formData: unknown) => {
         authActionPath: 'signup',
       }
       await signIn('credentials', authUserObj)
-      console.log('🧃server - newUserData', newUserData)
-      console.log(newUserData.data)
       delete newUserData.data.password
       return {
         message: newUserData?.data,
@@ -33,23 +31,42 @@ export const handleSignUp = async (formData: unknown) => {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin': {
-          console.error('err:: /singin - could not authenticated')
-          return { error: 'err:: Invalid credentials!' }
+          console.error('DEV::err: 🔴/singin - could not authenticated')
+          return { error: 'Invalid credentials!' }
         }
       }
     }
     throw error
   }
 }
-export const handleLogin = async (formData: FormData) => {
+export const handleLogin = async (formData: unknown) => {
   try {
-    formData.set('authActionPath', 'signin')
+    const newUserData = signinSchema.safeParse(formData)
+
+    if (!newUserData.success) {
+      const error: ZodError = newUserData.error
+      const allErrors = error.issues.map((item) => {
+        return item.message
+      })
+      return {
+        error: allErrors,
+      }
+    } else {
+      const authUserObj = {
+        ...newUserData.data,
+        authActionPath: 'signin',
+      }
+      const authenticatedUser = await signIn('credentials', authUserObj)
+      return {
+        message: authenticatedUser,
+      }
+    }
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin': {
-          console.error('err:: /singin - could not authenticated')
-          return { error: 'err:: Invalid credentials!' }
+          console.error('DEV::err: 🔴/singin - could not authenticated')
+          return { error: 'Invalid credentials!' }
         }
       }
     }

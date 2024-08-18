@@ -24,17 +24,22 @@ interface UserAuthDataOld extends User {
   password: string
 }
 
-export const getUserFromDB = async (userData: UserAuthDataOld) => {
+// @!⛳IMP - `getExistingUser()` function is responsible for returning all data -
+// -that session requires - when user is authenticated
+export const getExistingUser = async (phNumber) => {
   // console.log('DB:: finding user...')
   const match = await db.query.users.findFirst({
-    where: eq(users.phoneNumber, userData.phoneNumber),
+    where: eq(users.phoneNumber, phNumber),
+    columns: {
+      createdAt: false,
+      employmentStatus: false,
+    },
   })
-  // if (!match) throw new Error(`No user found with ph:${phNum}`)
+  if (!match) throw new Error(`No user found with ph:${phNumber}`)
   if (!match) {
-    // console.log(`DB:: user found`)
+    console.log(`🔴DB:: no match found`)
     return null
   }
-  // console.log(`DB:: user found`)
   return match
 }
 

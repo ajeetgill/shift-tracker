@@ -3,8 +3,9 @@ import Credentials from 'next-auth/providers/credentials'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from '@/db/db'
 import { accounts, users } from '@/db/schema'
-import { createUser } from '@/db/dbTools'
-import { userAuthSchema } from '@/utils/validators'
+import { createUser, getExistingUser } from '@/db/dbTools'
+import { signinSchema, userAuthSchema } from '@/utils/validators'
+import { comparePW } from './authUtils'
 
 declare module 'next-auth' {
   interface User {
@@ -40,54 +41,62 @@ export const authOptions: NextAuthConfig = {
         authActionPath: { label: 'Auth Action', type: 'text' },
       },
       authorize: async (credentials) => {
-        // at this point the credentials are validated inside the handleSignUp
+        // @!📖READ
+        // At this point the credentials are validated inside the handleSignUp
         // (but in order to use them without type issues - I still need to parse them
         // OR properly define the credentials key-value types)
-        //
+
         const currentPath = '/' + credentials?.authActionPath!
-        console.log('currentPath::', currentPath)
 
         if (!credentials) throw new Error('Missing credentials.')
 
-        const userData = userAuthSchema.safeParse({
-          ...credentials,
-          phoneNumber: Number(credentials?.phoneNumber),
-        })
-
-        console.log('userData', credentials)
         if (currentPath === '/signin') {
-          console.log('WIP-Zod validation for /signin')
-          // try {
-          // try to find the user - if doesn't exist - exit
-          // if exist - if correct password then return user
-          //   const matchedUser = await getUserFromDB(userData!)
-
-          //   if (!matchedUser) throw new Error('invalid user')
-          //   const correctPW = await comparePW(
-          //     userData?.password!,
-          //     matchedUser?.password!,
-          //   )
-
-          //   if (!correctPW) {
-          //     throw new Error('invalid user')
-          //   }
-          //   // console.log('Auth:: Found a match correctPW :: ', correctPW)
-          //   return matchedUser
-          // } catch (userNotExistError) {
-          //   // console.error(accountCreationError)
-          //   console.error('Auth:: 🔴 /signin user-ph: ', userData?.phoneNumber)
-          // }
-        } else if (currentPath === '/signup') {
+          const userLoginDetails = signinSchema.safeParse({
+            ...credentials,
+            phoneNumber: credentials?.phoneNumber,
+          })
           try {
-            const newCreatedUser = await createUser(userData.data)
+            // find the user - if
+            // -does not exist => exit/return/catch
+            // -exist => if correct password then return user
+            const existingUser = await getExistingUser(
+              userLoginDetails.data.phoneNumber!,
+            )
+            if (!existingUser) throw new Error('DEV:Invalid user')
+
+            const correctPW = await comparePW(
+              userLoginDetails.data?.password!,
+              existingUser?.password!,
+            )
+            if (!correctPW) {
+              throw new Error('DEV:Invalid user')
+            } else {
+              delete existingUser?.password
+            }
+            return existingUser
+          } catch (userNotExistError) {
+            // console.error(userNotExistError)
+            console.error(
+              'DEV::Auth: 🔴/signin user phone = ',
+              userLoginDetails?.data.phoneNumber,
+            )
+          }
+        } else if (currentPath === '/signup') {
+          const userCreationDetails = userAuthSchema.safeParse({
+            ...credentials,
+            phoneNumber: Number(credentials?.phoneNumber),
+          })
+          try {
+            const newCreatedUser = await createUser(userCreationDetails.data)
             return newCreatedUser
           } catch (accountCreationError) {
-            console.error('🔴/could not signup userData,')
-            console.error(userData.error)
-            console.error(userData.data)
+            // Unsure about how to best handle errors? Log them? or naah?
+            // console.error('🔴/could not signup userData,')
+            // console.error(userCreationDetails.error)
+            // console.error(userCreationDetails.data)
             console.error(
-              'Auth:: 🔴 /signup Could not create account with phone number: ',
-              userData.data?.phoneNumber,
+              'DEV::🔴 Could not create account with phone number: ',
+              userCreationDetails.data?.phoneNumber,
             )
           }
         }

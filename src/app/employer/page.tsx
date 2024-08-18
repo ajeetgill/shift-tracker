@@ -1,16 +1,13 @@
 import { auth } from '@/auth/auth'
 import AddBusinessForm from '@/components/addBusinessForm'
-import { getUserFromDB } from '@/db/dbTools'
 import { USER_ROLES } from '@/utils/constants'
-import { Link } from '@nextui-org/react'
 import { redirect } from 'next/navigation'
 
 const EmployerDashboard = async () => {
   const session = await auth()
   if (!session) redirect('/')
   if (session.user?.role !== USER_ROLES.OWNER) {
-    console.log('session.user?.role : ', session.user?.role)
-    // redirect('/')
+    redirect('/')
   }
 
   if (session && session?.user) {

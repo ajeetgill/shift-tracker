@@ -9,11 +9,13 @@ const Dashboard = async () => {
   if (!session) {
     redirect('/')
   }
-  if (session?.user.role.toLowerCase() === USER_ROLES.OWNER) {
+
+  if (session?.user && session?.user.role.toLowerCase() === USER_ROLES.OWNER) {
     redirect('/employer')
-  } else if (session && session?.user) {
+  } else if (session?.user) {
     const userId = session?.user.id!
     const employeeName = session.user?.name!
+
     // l -> L, turning luffy//{employeeName} into Luffy//{name}
     const name = employeeName[0].toUpperCase() + '' + employeeName.substring(1)
     const employeeStatus = await getEmployeeWorkStatus(userId)
@@ -23,8 +25,8 @@ const Dashboard = async () => {
     try {
       allBusinesses = await getAllLocations()
     } catch (err) {
-      console.error(err)
-      console.error('Could not getAllBusinesses list')
+      // console.error(err)
+      console.error('DEV::🔴/dashboard/-Could not getAllBusinesses list')
     }
     return (
       <div className="flex flex-col justify-between max-w-[550px] mx-auto gap-8">

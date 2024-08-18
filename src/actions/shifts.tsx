@@ -9,7 +9,7 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
   // console.log('🧖 starting time from client', formData)
   const session = await auth()
   if (!session) {
-    console.log('🔴 No session found. Session:= ', session ?? 'undefinde')
+    console.log('DEV::🔴🧃 No session found')
     return
   }
 
@@ -37,16 +37,16 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
     // console.log('🟢 :: created shift +1')
     // console.log('createdShiftData:', createdShiftData)
   } catch (err) {
-    console.error(err)
+    // console.error(err)
     console.error(
-      "🐛Error::couldn't create shift - await createShift(shiftData)",
+      "DEV::🐛Error::couldn't create shift - await createShift(shiftData)",
     )
   }
 }
 export const endActiveShift = async (endunixTimeMs) => {
   const session = await auth()
   if (!session) {
-    console.log('🔴 No session found. Session:= ', session ?? 'undefinde')
+    console.log('DEV:: @actions/🔴/auth No session found')
     return
   }
 
@@ -56,7 +56,7 @@ export const endActiveShift = async (endunixTimeMs) => {
   }
 
   if (!employeeId) {
-    console.log('🔴:: NO EMPLOYEE TO END SHIFT FOR')
+    console.log('DEV::🔴: NO EMPLOYEE TO END SHIFT FOR.')
     return
   }
   const updatedShift = await updateShiftAsEnded(employeeId, endunixTimeMs)
