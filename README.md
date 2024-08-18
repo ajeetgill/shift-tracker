@@ -28,6 +28,7 @@ Bare minimum technology you need to familiar with:
 ### Recommended learning material
 
 #### Nextjs
+
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
@@ -47,16 +48,29 @@ If you're a student, sigin to your Github Education Pack account, [signup if you
 You'll need some form of validating your status as a student (more details on Github Website).
 
 - Signup for Github Education Pack
-- Signup for FrontEnd Masters, would reommend the whole platform but especially watch [The Hard Parts of Asynchronous JavaScript
- by Will Sentance](https://frontendmasters.com/courses/javascript-new-hard-parts/)
-
+- Signup for FrontEnd Masters (whole platform is amazing🔥), but still recommendations below,
+  - [The Hard Parts of Asynchronous JavaScript by Will Sentance](https://frontendmasters.com/courses/javascript-new-hard-parts/)
 
 Next := Currently working on Deployment w/ Vercel
-## Deployment Information (deployed on Vercel)
-Each push in the branch pushes a deployment.
-- There are 3 branches in this Github project, which have corresponding URLs that each branch pushes changes to.
-- Format :`git-branch` : `{subdomain}.chiefjanitorial.com`(deployed url e.g. `staging.chiefjanitorial.com`) : purpose
-- `dev`: `dev.chiefjanitorial.com` : For quick iterations when developing.
-- `staging` : `staging.chiefjanitorial.com` : For sending final preview changes to client or anyone intermediatery - { 🚧 might be redundant with dev }
 
-- `main` : 🚨PRODUCTION🚨 : `employeeshifts.chiefjanitorial.com` : Real users can access this URL
+## Git Branches & Deployment Information (deployed on Vercel)
+
+- 2 major git branches in this Github project, MAIN & STAGIN
+- each push to both remote-branches, AUTOMATICALLY deploys latest build
+  - Preview url for sending to client or anyone intermediatery or impress your friends
+    - [staging.chiefjanitorial.com](https://staging.chiefjanitorial.com/) : staging branch
+
+  - 🚨PRODUCTION URL, real users use this URL
+    - [🚨employeeshifts.chiefjanitorial.com](https://employeeshifts.chiefjanitorial.com/) : main branch
+
+
+### BEFORE PUSHING to remotes,
+Make sure you can successfully run - `npm run build`.
+
+Optional reading for Why provided below
+
+Why? Well this is the "source code" - which is written using react/next so the browser/server can not understand this "coding-language(react)".
+This source code needs to be converted to good old - HTML, CSS, JS(will use web-code to refer) so machine can understand.
+The step to create this web-code is to run command `npm run build`.
+After the web-code is created - this is put on the vercel server to run, and this becomes your website.
+Which means - this steps needs to be successful.

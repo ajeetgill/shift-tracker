@@ -1,12 +1,15 @@
 import { signOut } from '@/auth/auth'
 import Submit from './submitBtn'
+import { redirect } from 'next/navigation'
 
 const SignOutBtn = () => {
   return (
     <form
       action={async () => {
         'use server'
-        await signOut()
+        await signOut({
+          redirectTo: '/signin',
+        })
       }}
     >
       <Submit
