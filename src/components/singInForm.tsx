@@ -84,6 +84,19 @@ const SigninForm = ({
         />
         <Submit className="w-full max-w-md mt-4 mb-2" label={btnText} />
       </form>
+      <p className="mx-auto max-w-1/2 w-1/2 text-center">
+        <small>
+          🚧
+          <br />
+          Login Issues?
+          <br />
+          Kindly remove any non-digit characters from mobile number and try
+          again.
+          <br />
+          E.g. Numbers like (+1902) or (902-345) all become (902) i.e. only
+          digits allowed.
+        </small>
+      </p>
     </>
   )
 }

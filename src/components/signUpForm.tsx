@@ -35,7 +35,7 @@ export const SignUpForm = () => {
             })
           } else toast.error(res.error)
         } else {
-          const okMsg: string = '🎉Account created successfully'
+          const okMsg: string = '🎉Yayy. Setting account...'
           toast.success(okMsg)
           console.log(res?.message ?? 'N/A RESPONSE')
         }

@@ -1,19 +1,25 @@
 import { z } from 'zod'
-import { AUTH_JS_ACTION, PHONE_NUM_LENGTH } from './constants'
+import {
+  AUTH_JS_ACTION,
+  NAME_LENGTH_MAX,
+  NAME_LENGTH_MIN,
+  PHONE_NUM_LENGTH,
+} from './constants'
 
 // START::- FIELD SCHEMAS (not same as objects)
 export const NameSchema = z
   .string()
   .trim()
-  .min(3, 'Name must be minimum 3 characters')
-  .max(16, 'Name must be maximum 16 characters')
+  .min(NAME_LENGTH_MIN, `Name must be minimum ${NAME_LENGTH_MIN} characters`)
+  .max(NAME_LENGTH_MAX, `Name must be maximum ${NAME_LENGTH_MAX} characters`)
 
 export const PhoneNumberSchema = z
   .string()
   .trim()
   .regex(/^\d+$/, { message: 'Phone number must contain only digits' })
-  .min(3, { message: 'Phone Number Length too short' })
-  .max(PHONE_NUM_LENGTH, { message: 'Invalid Phone Number Length' })
+  .length(PHONE_NUM_LENGTH, {
+    message: `Phone Number Length: ${PHONE_NUM_LENGTH} digits`,
+  })
 
 // const PhoneNumberSchema = z.preprocess((val) => {
 //   console.log('PhoneNumberSchema - val = ', val, typeof val)
