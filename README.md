@@ -1,6 +1,11 @@
 # Shift-Tracker
 
 ## Getting Started
+---
+
+The hidden goal behind this repo is also to give a playground for students to learn and then contribute. Hence I've also provided the resources helped me learn. Hopefully they'll help you as well. Now lets get started.
+
+---
 
 Install dependencies, and run the development server:
 
