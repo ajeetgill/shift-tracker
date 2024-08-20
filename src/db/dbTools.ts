@@ -67,6 +67,7 @@ export const createShift = async (shiftData: {
   businessId: string
   startUnixTimeSecs: string
   endTime: string | null
+  notes: string | null
 }) => {
   const shiftEmployee = shiftData?.employeeId
   // console.log('⚪DB:: Add shift of EMPLOYEE : ', shiftEmployee)

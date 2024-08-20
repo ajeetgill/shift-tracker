@@ -20,6 +20,7 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
   }
 
   const businessId = formData.get('location').toString()
+  const shiftNotes = formData.get('notes').toString()
   const temp_unixTimeMs = formData.get('shiftStartUnixTimeMS')
   const startUnixTimeSecs = Math.floor(Number(temp_unixTimeMs) / 1000) + ''
 
@@ -28,6 +29,7 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
     businessId,
     startUnixTimeSecs,
     endTime: null,
+    notes: shiftNotes,
   }
   // console.log('TODO:: about to create a shift, data =', shiftData)
 

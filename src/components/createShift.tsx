@@ -1,11 +1,19 @@
 'use client'
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { useFormState } from 'react-dom'
 import { clockInShift, endActiveShift } from '@/actions/shifts'
-import { Button, Chip, Input, Select, SelectItem } from '@nextui-org/react'
+import {
+  Button,
+  Chip,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+} from '@nextui-org/react'
 import Submit from './submitBtn'
 import { formatLiveTimeHHMM } from '@/utils/helpers'
 import { useRouter } from 'next/navigation'
+import { SHIFT_NOTES_LENGTH } from '@/utils/constants'
 
 const initState = { message: null }
 
@@ -49,6 +57,7 @@ const CreateShift = ({
 
   const [formState, action] = useFormState(clockInShift, initState)
   const [businessName, setName] = useState('PEI Farms')
+  const formRef = useRef<HTMLFormElement>(null)
 
   const router = useRouter()
 
@@ -57,7 +66,10 @@ const CreateShift = ({
   const [isPending, startTransition] = useTransition()
   const handleClockOut = () => {
     startTransition(() => {
-      endActiveShift(Date.now()).finally(() => router.refresh())
+      endActiveShift(Date.now()).then(() => {
+        formRef.current.reset()
+        router.refresh()
+      })
     })
   }
 
@@ -66,6 +78,7 @@ const CreateShift = ({
       <h3 className="my-4 text-2xl font-bold capitalize py-2">Clockin shift</h3>
 
       <form
+        ref={formRef}
         action={action}
         className="bg-content1 border border-default-100 shadow-lg rounded-md p-3 flex flex-col gap-8"
       >
@@ -108,7 +121,19 @@ const CreateShift = ({
           name="liveTimer"
           type="text"
         />
-
+        <Textarea
+          name="notes"
+          disabled={isOnActiveShift}
+          maxLength={SHIFT_NOTES_LENGTH}
+          label={
+            isOnActiveShift
+              ? 'Saved shift details'
+              : 'Additional details for shift (enter before clockin)'
+          }
+          contentEditable={isOnActiveShift}
+          placeholder="Before starting shift. You can enter details like your ride partner, etc."
+          className="w-full"
+        />
         <Submit label={'Clockin'} disabled={isOnActiveShift} />
         {isOnActiveShift && (
           <Button

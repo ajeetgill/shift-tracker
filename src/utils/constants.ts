@@ -11,3 +11,4 @@ export const AUTH_JS_ACTION = ['signup', 'signin'] as const
 export const PHONE_NUM_LENGTH: number = 10
 export const NAME_LENGTH_MIN = 2
 export const NAME_LENGTH_MAX = 16
+export const SHIFT_NOTES_LENGTH: number = 120
