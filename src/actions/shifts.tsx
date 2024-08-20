@@ -20,7 +20,7 @@ export const clockInShift = async (prevState: any, formData: FormData) => {
   }
 
   const businessId = formData.get('location').toString()
-  const shiftNotes = formData.get('notes').toString()
+  const shiftNotes = formData.get('notes').toString().trim()
   const temp_unixTimeMs = formData.get('shiftStartUnixTimeMS')
   const startUnixTimeSecs = Math.floor(Number(temp_unixTimeMs) / 1000) + ''
 
