@@ -128,7 +128,7 @@ const CreateShift = ({
           label={
             isOnActiveShift
               ? 'Saved shift details'
-              : 'Additional details for shift (enter before clockin)'
+              : `Add details before clocking in - ${SHIFT_NOTES_LENGTH} chars max`
           }
           contentEditable={isOnActiveShift}
           placeholder="Before starting shift. You can enter details like your ride partner, etc."

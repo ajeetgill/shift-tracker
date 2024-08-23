@@ -10,7 +10,7 @@ const signup = async () => {
     if (session.user.role?.toLowerCase() === USER_ROLES.WORKER)
       redirect('/dashboard')
     else if (session.user.role?.toLowerCase() === USER_ROLES.OWNER)
-      redirect('/employer')
+      redirect('/businesses')
   }
 
   return (

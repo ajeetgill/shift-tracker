@@ -2,7 +2,7 @@ import SignOutBtn from '@/components/signOutButton'
 import { Link } from '@nextui-org/react'
 import { ChevronLeft } from 'lucide-react'
 
-const EmployerLayout = ({
+const BusinessesLayout = ({
   children,
   allBusinesses,
 }: {
@@ -20,4 +20,4 @@ const EmployerLayout = ({
     </div>
   )
 }
-export default EmployerLayout
+export default BusinessesLayout

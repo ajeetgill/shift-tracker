@@ -2,7 +2,7 @@
 import { User } from 'next-auth'
 import { db } from './db'
 import { businesses, businessTypes, shifts, users } from './schema'
-import { eq, ilike, sql } from 'drizzle-orm'
+import { desc, eq, ilike, sql } from 'drizzle-orm'
 
 import { DEFAULT_BUSSINESS_TYPE } from '@/utils/constants'
 import { revalidatePath } from 'next/cache'
@@ -109,6 +109,46 @@ export const createShift = async (shiftData: {
 
     return insertedShift
   })
+}
+
+export const getShiftDetails = async () => {
+  const allShifts = db
+    .select({
+      id: shifts.id,
+      notes: shifts.notes,
+      startDate: sql`
+        TO_CHAR(
+          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+          'YYYY-MM-DD'
+        )
+      `,
+      startTimeAtlantic: sql`
+        TO_CHAR(
+          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+          'HH24:MI'
+        )
+      `,
+      endDate: sql`
+        TO_CHAR(
+          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+          'YYYY-MM-DD'
+        )
+      `,
+      endTimeAtlantic: sql`
+        TO_CHAR(
+          TO_TIMESTAMP(CAST(${shifts.endUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+          'HH24:MI'
+        ) || ''
+      `,
+      employeeName: users.name,
+      businessName: businesses.name,
+    })
+    .from(shifts)
+    .leftJoin(users, eq(shifts.employeeId, users.id))
+    .leftJoin(businesses, eq(shifts.businessId, businesses.id))
+    .orderBy(desc(sql`CAST(${shifts.startUnixTimeSecs} AS BIGINT)`))
+    .execute()
+  return allShifts
 }
 
 export const getAllShifts = async (employeeId: string) => {
@@ -227,7 +267,7 @@ export const createBusinesses = async (ownerId, formData: FormData) => {
 
     await db.insert(businesses).values(businessesData)
 
-    revalidatePath('/employer/@allBusinesses')
+    revalidatePath('/businesses/@allBusinesses')
   } catch (err) {
     console.error(err)
     console.error('Could not create ')

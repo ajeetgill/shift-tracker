@@ -11,7 +11,7 @@ const Dashboard = async () => {
   }
 
   if (session?.user && session?.user.role.toLowerCase() === USER_ROLES.OWNER) {
-    redirect('/employer')
+    redirect('/businesses')
   } else if (session?.user) {
     const userId = session?.user.id!
     const employeeName = session.user?.name!

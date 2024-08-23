@@ -30,18 +30,31 @@ export default async function Home() {
           <br />
           Island&apos;s Service Provider.
         </p>
-        <Button
-          as={Link}
-          color="primary"
-          href={
-            session.user.role === USER_ROLES.WORKER ? '/dashboard' : '/employer'
-          }
-          variant="flat"
-        >
-          {session.user.role === USER_ROLES.WORKER
-            ? 'Log New Shift'
-            : 'Add business'}
-        </Button>
+        {session.user.role === USER_ROLES.WORKER && (
+          <Button as={Link} color="primary" href={'/dashboard'} variant="flat">
+            Log New Shift
+          </Button>
+        )}
+        {session.user.role === USER_ROLES.OWNER && (
+          <>
+            <Button
+              as={Link}
+              color="primary"
+              href={'/businesses'}
+              variant="flat"
+            >
+              Add business
+            </Button>
+            <Button
+              as={Link}
+              color="primary"
+              href={'/shiftdetails'}
+              variant="flat"
+            >
+              See Shift Data
+            </Button>
+          </>
+        )}
       </main>
     )
   }

@@ -3,7 +3,7 @@ import AddBusinessForm from '@/components/addBusinessForm'
 import { USER_ROLES } from '@/utils/constants'
 import { redirect } from 'next/navigation'
 
-const EmployerDashboard = async () => {
+const BusinessesDashboard = async () => {
   const session = await auth()
   if (!session) redirect('/')
   if (session.user?.role !== USER_ROLES.OWNER) {
@@ -23,4 +23,4 @@ const EmployerDashboard = async () => {
     )
   }
 }
-export default EmployerDashboard
+export default BusinessesDashboard
