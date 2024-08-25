@@ -14,7 +14,7 @@ const ShiftDetails = async () => {
 
   return (
     <section className="flex  w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]">
-      <h2>ShiftDetails</h2>
+      <h2 className="text-2xl font-bold">Shift Details</h2>
       {Object.keys(shiftDetails).map((date) => (
         <div key={date}>
           <h3 className="text-2xl font-bold w-full bg-gray-500 p-4 pb-8 rounded-md relative top-6">
