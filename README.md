@@ -1,9 +1,13 @@
 # Shift-Tracker
 
 ## Getting Started
----
 
-The hidden goal behind this repo is also to give a playground for students to learn and then contribute. Hence I've also provided the resources helped me learn. Hopefully they'll help you as well. Now lets get started.
+**Primary Goal**: Give a playground for students to learn and then contribute.
+
+*_Secondary goal_*: 
+Learn your tools and AI tools for rapid deployment/development.
+
+Hence I've also provided the resources helped me learn and build this project faster. Hopefully they'll help you as well. Now lets get started.
 
 ---
 
@@ -56,23 +60,24 @@ You'll need some form of validating your status as a student (more details on Gi
 - Signup for FrontEnd Masters (whole platform is amazing🔥), but still recommendations below,
   - [The Hard Parts of Asynchronous JavaScript by Will Sentance](https://frontendmasters.com/courses/javascript-new-hard-parts/)
 
-Next := Currently working on Deployment w/ Vercel
 
-## Git Branches & Deployment Information (deployed on Vercel)
+## Git Branches & Deploy Info (deployed on Vercel)
 
-- 2 major git branches in this Github project, MAIN & STAGIN
-- each push to both remote-branches, AUTOMATICALLY deploys latest build
-  - Preview url for sending to client or anyone intermediatery or impress your friends
-    - [staging.chiefjanitorial.com](https://staging.chiefjanitorial.com/) : staging branch
+- ONLY 1 major git branch in this Github project, `MAIN` - `keep this clean🥲`
 
-  - 🚨PRODUCTION URL, real users use this URL
-    - [🚨employeeshifts.chiefjanitorial.com](https://employeeshifts.chiefjanitorial.com/) : main branch
+- 🚨PRODUCTION URL🚨 [employeeshifts.chiefjanitorial.com](https://employeeshifts.chiefjanitorial.com/)
+  - Real users use this URL 
+  - _**No way to push**_ changes to this URL automatically, 
+  - Only manually upgrades from staging to production (by design for now)
 
 
-### BEFORE PUSHING to remotes,
-Make sure you can successfully run - `npm run build`.
 
-Optional reading for Why provided below
+
+### BEFORE PUSHING
+Make sure you can successfully run - `npm run build`<sup>[1]</sup>. 
+_Especially_, if you want to see the changes in testing/staging URL.
+
+<sup>[^1]</sup>Optional reading for Why provided below
 
 Why? Well this is the "source code" - which is written using react/next so the browser/server can not understand this "coding-language(react)".
 This source code needs to be converted to good old - HTML, CSS, JS(will use web-code to refer) so machine can understand.
