@@ -112,43 +112,50 @@ export const createShift = async (shiftData: {
 }
 
 export const getShiftDetails = async () => {
-  const allShifts = db
+  const shiftDetailsByDate = await db
     .select({
-      id: shifts.id,
-      notes: shifts.notes,
       startDate: sql`
         TO_CHAR(
           TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
           'YYYY-MM-DD'
         )
       `,
-      startTimeAtlantic: sql`
-        TO_CHAR(
-          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
-          'HH24:MI'
+      shifts: sql`
+        array_agg(
+          json_build_object(
+            'id', ${shifts.id},
+            'notes', ${shifts.notes},
+            'startTimeAtlantic', TO_CHAR(
+              TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+              'HH24:MI'
+            ),
+            'endTimeAtlantic', TO_CHAR(
+              TO_TIMESTAMP(CAST(${shifts.endUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+              'HH24:MI'
+            ),
+            'employeeName', ${users.name},
+            'businessName', ${businesses.name}
+          )
         )
       `,
-      endDate: sql`
-        TO_CHAR(
-          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
-          'YYYY-MM-DD'
-        )
-      `,
-      endTimeAtlantic: sql`
-        TO_CHAR(
-          TO_TIMESTAMP(CAST(${shifts.endUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
-          'HH24:MI'
-        ) || ''
-      `,
-      employeeName: users.name,
-      businessName: businesses.name,
     })
     .from(shifts)
     .leftJoin(users, eq(shifts.employeeId, users.id))
     .leftJoin(businesses, eq(shifts.businessId, businesses.id))
-    .orderBy(desc(sql`CAST(${shifts.startUnixTimeSecs} AS BIGINT)`))
+    .groupBy(sql`TO_CHAR(
+      TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+      'YYYY-MM-DD'
+    )`)
+    .orderBy(desc(sql`TO_CHAR(
+      TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+      'YYYY-MM-DD'
+    )`))
     .execute()
-  return allShifts
+
+  // Convert the result to an object with dates as keys
+  return Object.fromEntries(
+    shiftDetailsByDate.map(({ startDate, shifts }) => [startDate, shifts])
+  )
 }
 
 export const getAllShifts = async (employeeId: string) => {

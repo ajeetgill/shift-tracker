@@ -11,10 +11,6 @@ import {
 
 const detailedShiftColumns = [
   {
-    key: 'startDate',
-    label: 'Start Date',
-  },
-  {
     key: 'startTimeAtlantic',
     label: 'Start Time',
   },
