@@ -63,13 +63,13 @@ You'll need some form of validating your status as a student (more details on Gi
 
 ## Git Branches & Deploy Info (deployed on Vercel)
 
-- ONLY 1 major git branch in this Github project, `MAIN` - `keep this clean🥲`
+- `STAGING` branch - push to this branch when you want to test your changes outside localhost.
+- STAGING URL [staging.chiefjanitorial.com](https://employeeshifts.chiefjanitorial.com/)
 
-- 🚨PRODUCTION URL🚨 [employeeshifts.chiefjanitorial.com](https://employeeshifts.chiefjanitorial.com/)
-  - Real users use this URL 
-  - _**No way to push**_ changes to this URL automatically, 
-  - Only manually upgrades from staging to production (by design for now)
 
+- 🚨DO NOT PUSH ANYTHING TO MAIN BRANCH🚨that isn't completed yet. 
+  - Completed defined as, adds some functionality without breaking anything (i.e. you've tested it manually - until better solution)🚨
+- 🚨BASICALLY `MAIN` branch - `keep this clean🥲`🚨
 
 
 
