@@ -34,9 +34,9 @@ const detailedShiftColumns = [
 
 export default function DataTable({ allData }) {
   return (
-    <div className="w-full space-y-4">
-      <div className="rounded-md max-w-[1050px] mx-auto">
-        <Table aria-label="Shift details of employees">
+    <div className="w-full space-y-4 max-w-[100vw] border-2 rounded-lg border-gray-500">
+
+        <Table aria-label="Shift details of employees" radius='sm'>
           <TableHeader columns={detailedShiftColumns}>
             {(column) => (
               <TableColumn
@@ -57,7 +57,7 @@ export default function DataTable({ allData }) {
             )}
           </TableBody>
         </Table>
-      </div>
+
     </div>
   )
 }

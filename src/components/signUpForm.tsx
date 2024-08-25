@@ -47,7 +47,7 @@ export const SignUpForm = () => {
 
   return (
     <form
-      className="flex max-w-[550px] w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
+      className="flex w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
       action={handleSubmit}
     >
       <Input

@@ -1,10 +1,13 @@
-import { signOut } from '@/auth/auth'
+import { auth, signOut } from '@/auth/auth'
 import Submit from './submitBtn'
 import { redirect } from 'next/navigation'
 
-const SignOutBtn = () => {
+const SignOutBtn = async () => {
+  const session = await auth()
+  if (!session) return
   return (
     <form
+      className="flex justify-center py-8"
       action={async () => {
         'use server'
         await signOut({
@@ -14,7 +17,7 @@ const SignOutBtn = () => {
     >
       <Submit
         label="Sign Out"
-        className="bg-red-400 hover:bg-red-500 font-semibold w-full max-w-[550px]"
+        className="bg-red-400 hover:bg-red-500 font-semibold w-full "
       />
     </form>
   )

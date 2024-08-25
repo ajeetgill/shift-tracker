@@ -8,7 +8,7 @@ export default async function Home() {
   const session = await auth()
   if (!session)
     return (
-      <main className="flex min-h-[50vh] flex-col justify-between p-4 md:p-24 gap-4">
+      <main className="flex min-h-[50vh] flex-col justify-between p-4 gap-4">
         <p>
           Hi, We&apos;re Chief Janitorial
           <br />
@@ -22,7 +22,7 @@ export default async function Home() {
     )
   else {
     return (
-      <main className="flex min-h-[50vh] flex-col justify-between p-4 md:p-24 gap-4">
+      <main className="flex flex-col p-4 gap-4">
         <p>
           Hi {session.user.name} ({session.user.role}),
           <br />

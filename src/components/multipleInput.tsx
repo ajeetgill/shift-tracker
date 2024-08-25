@@ -39,7 +39,7 @@ export default function MultipleInput({ userId, fieldsName }) {
 
   return (
     <form
-      className="flex w-full max-w-[550px] flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
+      className="flex w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
       action={async (formData: FormData) => {
         await createBusinesses(userId, formData)
       }}

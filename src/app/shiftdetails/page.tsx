@@ -17,7 +17,7 @@ const ShiftDetails = async () => {
       <h2 className="text-2xl font-bold">Shift Details</h2>
       {Object.keys(shiftDetails).map((date) => (
         <div key={date}>
-          <h3 className="text-2xl font-bold w-full bg-gray-500 p-4 pb-8 rounded-md relative top-6">
+          <h3 className="text-2xl font-bold w-full bg-gray-500 p-4 pb-8 rounded-2xl relative top-6">
             {date}
           </h3>
           <DataTable allData={shiftDetails[date]} />

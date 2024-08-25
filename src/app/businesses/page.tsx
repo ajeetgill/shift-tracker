@@ -16,7 +16,7 @@ const BusinessesDashboard = async () => {
     const name = userName[0].toUpperCase() + '' + userName.substring(1)
 
     return (
-      <div className="flex flex-col justify-between max-w-[550px] mx-auto gap-8">
+      <div className="flex flex-col justify-between mx-auto gap-8">
         <h1 className="font-bold text-2xl">Track Business Shifts</h1>
         <AddBusinessForm />
       </div>

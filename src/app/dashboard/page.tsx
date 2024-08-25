@@ -29,7 +29,7 @@ const Dashboard = async () => {
       console.error('DEV::🔴/dashboard/-Could not getAllBusinesses list')
     }
     return (
-      <div className="flex flex-col justify-between max-w-[550px] mx-auto gap-8">
+      <div className="flex flex-col justify-between mx-auto gap-8">
         <CreateShift
           name={name}
           currentWorkStatus={currentWorkStatus}

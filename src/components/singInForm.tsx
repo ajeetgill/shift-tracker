@@ -62,7 +62,7 @@ const SigninForm = ({
     <>
       <h1 className="uppercase text-2xl font-bold text-center">{heading}</h1>
       <form
-        className="flex max-w-[550px] w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
+        className="flex w-full flex-col items-center gap-6  rounded-md mx-auto bg-[#4504040]"
         action={handleSubmit}
       >
         <Input
@@ -76,7 +76,7 @@ const SigninForm = ({
         />
         <Input
           name="password"
-          type="text"
+          type="password"
           required
           label="Password"
           placeholder="Length 3-16 characters"
@@ -84,19 +84,6 @@ const SigninForm = ({
         />
         <Submit className="w-full max-w-md mt-4 mb-2" label={btnText} />
       </form>
-      <p className="mx-auto max-w-1/2 w-1/2 text-center">
-        <small>
-          🚧
-          <br />
-          Login Issues?
-          <br />
-          Kindly remove any non-digit characters from mobile number and try
-          again.
-          <br />
-          E.g. Numbers like (+1902) or (902-345) all become (902) i.e. only
-          digits allowed.
-        </small>
-      </p>
     </>
   )
 }

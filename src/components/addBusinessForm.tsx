@@ -13,7 +13,7 @@ const AddBusinessForm = async () => {
     // l -> L, turning luffy//{employeeName} into Luffy//{name}
 
     return (
-      <div className="flex flex-col justify-between  w-full max-w-[550px] mx-auto gap-8 px-4">
+      <div className="flex flex-col justify-between  w-full mx-auto gap-8 px-4">
         <div>
           <h1 className="font-bold text-lg">Add Business Form</h1>
           <small>*enter one business name per field</small>
