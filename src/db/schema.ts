@@ -11,6 +11,7 @@ import {
   integer,
   pgEnum,
   primaryKey,
+  index,
 } from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
 
@@ -45,6 +46,7 @@ export const shiftTypeEnum = pgEnum('shift_type', [
 
 const id = () => uuid('id').primaryKey().defaultRandom()
 const createdAt = () => timestamp('created_at').defaultNow().notNull()
+const updatedAt = () => timestamp('updated_at').defaultNow().notNull()
 
 // Users table
 export const users = pgTable('users', {
@@ -65,7 +67,11 @@ export const users = pgTable('users', {
     .default('employed')
     .notNull(),
   role: roleEnum('role').default('worker').notNull(),
-})
+  updatedAt: updatedAt(),
+}, (table) => ({
+  phoneNumberIdx: index('phone_number_idx').on(table.phoneNumber),
+  emailIdx: index('email_idx').on(table.email),
+}))
 export const insertUserSchema = createInsertSchema(users)
 export const selectUserSchema = createSelectSchema(users)
 
@@ -103,12 +109,13 @@ export const accounts = pgTable(
 export const businesses = pgTable('businesses', {
   createdAt: createdAt(),
   id: id(),
-  ownerId: uuid('owner_id').notNull(),
+  ownerId: uuid('owner_id').notNull().references(() => users.id, { onDelete: 'set null' }),
   name: text('name').notNull(),
   location: text('location').notNull(),
   businessTypeId: uuid('business_type_id').notNull(),
   contactNumber: text('contact_number'),
   gpsLocation: text('gps_location'),
+  updatedAt: updatedAt(),
 })
 
 // Shifts table
@@ -117,8 +124,8 @@ export const businesses = pgTable('businesses', {
 export const shifts = pgTable('shifts', {
   id: id(),
   createdAt: createdAt(),
-  employeeId: uuid('employee_id').notNull(),
-  businessId: uuid('business_id').notNull(),
+  employeeId: uuid('employee_id').notNull().references(() => users.id, { onDelete: 'set null' }),
+  businessId: uuid('business_id').notNull().references(() => businesses.id, { onDelete: 'set null' }),
   date: text('date').notNull(),
   serverDate: date('server_date').notNull().defaultNow(),
   startUnixTimeSecs: text('start_unixtime_secs'),
@@ -128,6 +135,7 @@ export const shifts = pgTable('shifts', {
   notes: text('notes'),
   type: shiftTypeEnum('shift_type').default('n/a').notNull(),
   gpsShiftLocation: text('gps_shift_location'),
+  updatedAt: updatedAt(),
 })
 
 export const businessesRelations = relations(businesses, ({ one, many }) => ({
