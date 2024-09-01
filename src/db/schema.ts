@@ -1,6 +1,6 @@
 import { USER_ROLES } from '@/utils/constants'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
   pgTable,
   text,
@@ -46,7 +46,8 @@ export const shiftTypeEnum = pgEnum('shift_type', [
 
 const id = () => uuid('id').primaryKey().defaultRandom()
 const createdAt = () => timestamp('created_at').defaultNow().notNull()
-const updatedAt = () => timestamp('updated_at').defaultNow().notNull()
+const updatedAt = () => timestamp('updated_at').defaultNow()
+    .$onUpdate(() => sql`now()`)
 
 // Users table
 export const users = pgTable('users', {
@@ -109,7 +110,7 @@ export const accounts = pgTable(
 export const businesses = pgTable('businesses', {
   createdAt: createdAt(),
   id: id(),
-  ownerId: uuid('owner_id').notNull().references(() => users.id, { onDelete: 'set null' }),
+  ownerId: uuid('owner_id').references(() => users.id, { onDelete: 'set null' }),
   name: text('name').notNull(),
   location: text('location').notNull(),
   businessTypeId: uuid('business_type_id').notNull(),
@@ -124,8 +125,8 @@ export const businesses = pgTable('businesses', {
 export const shifts = pgTable('shifts', {
   id: id(),
   createdAt: createdAt(),
-  employeeId: uuid('employee_id').notNull().references(() => users.id, { onDelete: 'set null' }),
-  businessId: uuid('business_id').notNull().references(() => businesses.id, { onDelete: 'set null' }),
+  employeeId: uuid('employee_id').references(() => users.id, { onDelete: 'set null' }),
+  businessId: uuid('business_id').references(() => businesses.id, { onDelete: 'set null' }),
   date: text('date').notNull(),
   serverDate: date('server_date').notNull().defaultNow(),
   startUnixTimeSecs: text('start_unixtime_secs'),
