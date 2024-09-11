@@ -1,7 +1,6 @@
 import { auth } from '@/auth/auth'
 import DataTable from '@/components/dataTable'
 
-import SecondaryLink from '@/components/secondaryLinks'
 import { getShiftDetails } from '@/db/dbTools'
 import { USER_ROLES } from '@/utils/constants'
 import { redirect } from 'next/navigation'

@@ -116,7 +116,7 @@ export const getShiftDetails = async () => {
     .select({
       startDate: sql`
         TO_CHAR(
-          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+          TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'America/Halifax',
           'YYYY-MM-DD'
         )
       `,
@@ -126,11 +126,11 @@ export const getShiftDetails = async () => {
             'id', ${shifts.id},
             'notes', ${shifts.notes},
             'startTimeAtlantic', TO_CHAR(
-              TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+              TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'America/Halifax',
               'HH24:MI'
             ),
             'endTimeAtlantic', TO_CHAR(
-              TO_TIMESTAMP(CAST(${shifts.endUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+              TO_TIMESTAMP(CAST(${shifts.endUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'America/Halifax',
               'HH24:MI'
             ),
             'employeeName', ${users.name},
@@ -143,11 +143,11 @@ export const getShiftDetails = async () => {
     .leftJoin(users, eq(shifts.employeeId, users.id))
     .leftJoin(businesses, eq(shifts.businessId, businesses.id))
     .groupBy(sql`TO_CHAR(
-      TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+      TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'America/Halifax',
       'YYYY-MM-DD'
     )`)
     .orderBy(desc(sql`TO_CHAR(
-      TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'AST',
+      TO_TIMESTAMP(CAST(${shifts.startUnixTimeSecs} AS BIGINT)) AT TIME ZONE 'America/Halifax',
       'YYYY-MM-DD'
     )`))
     .execute()
