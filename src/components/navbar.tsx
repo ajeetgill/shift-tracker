@@ -1,4 +1,5 @@
 import { Navbar, NavbarBrand } from '@nextui-org/navbar'
+import Link from 'next/link';
 import NextLogo from '@/assets/logo-full.png'
 import Image from 'next/image'
 
@@ -9,11 +10,13 @@ export default function TopBar() {
   return (
     <Navbar shouldHideOnScroll className="max-w-[750px] mx-auto">
       <NavbarBrand>
-        <Image
-          src={NextLogo}
-          alt="placeholder logo"
-          className="max-h-10 w-auto"
-        />
+        <Link href="/">
+          <Image
+            src={NextLogo}
+            alt="placeholder logo"
+            className="max-h-10 w-auto"
+          />
+        </Link>
       </NavbarBrand>
     </Navbar>
   )
